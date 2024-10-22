@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/Meeshbhoombah/dsa/issues"
   },
-  "homepage": "https://github.com/Meeshbhoombah/dsa#readme"
+  "homepage": "https://github.com/Meeshbhoombah/dsa#readme",
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
 }
