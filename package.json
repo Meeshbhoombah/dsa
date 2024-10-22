@@ -1,0 +1,26 @@
+{
+  "name": "dsa",
+  "version": "0.0.0",
+  "description": "A command-line utility for managing the learning of data structures and algorithms",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meeshbhoombah/dsa.git"
+  },
+  "keywords": [
+    "Command-line",
+    "utility",
+    "data",
+    "structures",
+    "algorithms"
+  ],
+  "author": "Meeshbhoombah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Meeshbhoombah/dsa/issues"
+  },
+  "homepage": "https://github.com/Meeshbhoombah/dsa#readme"
+}
