@@ -4,7 +4,7 @@
   "description": "A command-line utility for managing the learning of data structures and algorithms",
   "main": "app.ts",
   "scripts": {
-    "start": "ts-node-dev --respawn app.ts"
+    "start": "ts-node-dev --respawn --env-file .env app.ts"
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,8 @@
   "devDependencies": {
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "octokit": "^4.0.2"
   }
 }
