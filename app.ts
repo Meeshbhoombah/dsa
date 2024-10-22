@@ -1,6 +1,13 @@
 import * as https from 'https';
 
+
 console.log(process.env.GITHUB_FINE_GRAINED_TOKEN);
+
+
+function pprint(s: string) {
+    console.log(JSON.stringify(JSON.parse(s), null, 2))
+}
+
 
 /*
 let httpBinRequest = https.get('https://httpbin.org/headers', (res) => {
@@ -14,6 +21,7 @@ let httpBinRequest = https.get('https://httpbin.org/headers', (res) => {
 });
 */
 
+
 let options = {
     headers: {
         'Accept' : 'application/vnd.github+json',
@@ -25,17 +33,26 @@ let options = {
 
 let req = https.get('https://api.github.com/gists', options, (res) => {
 
-    console.log(res.statusCode);
+    let raw: string = "";
 
     res.on('data', (data) => {
         // Looking at the headers of responses from GitHub, the encoding is
         // `latin1`
-        console.log(data.toString('latin1'));
+        raw += data.toString('latin1');
+
     });
 
+    res.on('end', () => {
+  
+        let gists = JSON.parse(raw);
+        for (let gist of gists) {
+            if (gist.files['DSA.md']) {
+                console.log(gist);
+            }
+        }
+   
+    });
+    
+
 });
-
-
-console.log(req);
-
 
