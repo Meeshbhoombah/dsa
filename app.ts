@@ -51,7 +51,6 @@ async function get(url: string) {
     });
 }
 
-
 async function getGists() {
     let rawGistsString = await get(GITHUB_API + 'gists');
     let gists = JSON.parse(rawGistsString);
@@ -74,20 +73,46 @@ async function getRawDsaGist() {
 async function parseLines() {
     let rawDsaGist = await getRawDsaGist();
     let dsaGist = rawDsaGist.split('\n');
-    
-    let categories = 0;
-    let topics = 0;
-   
+  
+    let categories = [];
+    let topics = [];
+
     for (let line of dsaGist) {
         if (line[0] == '#') {
-            categories++
+            categories.push((line.replace(/#/g, '')).substring(1));
         }
 
         if (line[0] == '-') {
-            topics++
+            topics.push(line.substring(6));
         }
     }
+
+    console.log(categories);
+    console.log(topics);
 }
 
-process.env.HOME;
+parseLines();
+
+
+const DB_PATH = process.env.HOME + '/.dsa';
+const DB_NAME = '/database.db';
+
+
+import fs from 'fs';
+import DatabaseConstructor, { Database } from 'better-sqlite3';
+
+
+async function createDatabase() {
+    if (!fs.existsSync(DB_PATH)) {
+        fs.mkdir(DB_PATH, (e) => {
+            throw e;
+        });   
+    }
+
+    let db: Database = new DatabaseConstructor(DB_PATH + DB_NAME);
+    // Some initialization
+    return db;
+}
+
+
 
