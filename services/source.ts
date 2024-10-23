@@ -1,9 +1,6 @@
 import * as https from 'https';
 
-
-function pprint(s: string) {
-    console.log(JSON.stringify(JSON.parse(s), null, 2))
-}
+import state from '../app.ts';
 
 
 const GITHUB_API = 'https://api.github.com/';
@@ -86,28 +83,18 @@ async function parseLines() {
             topics.push(line.substring(6));
         }
     }
+
+    console.log(categories);
+    console.log(topics);
 }
 
 
-const DB_PATH = process.env.HOME + '/.dsa';
-const DB_NAME = '/database.db';
-
-
-import fs from 'fs';
-import DatabaseConstructor, { Database } from 'better-sqlite3';
-
-
-async function createDatabase() {
-    if (!fs.existsSync(DB_PATH)) {
-        fs.mkdir(DB_PATH, (e) => {
-            throw e;
-        });   
-    }
-
-    let db: Database = new DatabaseConstructor(DB_PATH + DB_NAME);
-    // Some initialization
-    return db;
+async function loadSourceDsaData() {
+    let gists = getGists();
+    let rawDsaGist = getDsaGist(gists);
 }
 
+async function parseSourceDsaGist() {
 
+}
 
