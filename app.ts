@@ -68,5 +68,35 @@ async function getRawDsaGist() {
             return rawDsaGist;
         }
     }
+
+    throw new Error('Gist: DSA.md not found');
 }
+
+
+async function parseLines() {
+    let rawDsaGist = await getRawDsaGist();
+    let dsaGist = rawDsaGist.split('\n');
+    
+    let categories = 0;
+    let topics = 0;
+   
+    for (let line of dsaGist) {
+        if (line[0] == '#') {
+            console.log('category');
+            categories++
+        }
+
+        if (line[0] == '-') {
+            console.log('topic') 
+            topics++
+        }
+
+
+    }
+
+    console.log('Categories: ', categories);
+    console.log('Topics: ', topics);
+}
+
+parseLines();
 
