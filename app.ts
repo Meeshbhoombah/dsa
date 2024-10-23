@@ -15,8 +15,6 @@ const GITHUB_API = 'https://api.github.com/';
 let httpBinRequest = https.get('https://httpbin.org/headers', (res) => {
 
     res.on('data', (data) => {
-        // Looking at the headers of responses from GitHub, the encoding is
-        // `latin1`
         console.log(data.toString());
     });
 
@@ -82,21 +80,14 @@ async function parseLines() {
    
     for (let line of dsaGist) {
         if (line[0] == '#') {
-            console.log('category');
             categories++
         }
 
         if (line[0] == '-') {
-            console.log('topic') 
             topics++
         }
-
-
     }
-
-    console.log('Categories: ', categories);
-    console.log('Topics: ', topics);
 }
 
-parseLines();
+process.env.HOME;
 
