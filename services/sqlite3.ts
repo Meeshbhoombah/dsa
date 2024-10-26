@@ -16,4 +16,6 @@ async function createDatabase() {
     let db: Database = new DatabaseConstructor(DB_PATH + DB_NAME);
     // Some initialization
     return db;
+
+    console.log(db);
 }
