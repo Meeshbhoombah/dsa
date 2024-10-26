@@ -8,7 +8,8 @@ import {
 
     parseRawDsaGist
 } from '../services/source';
-// import { createCategory } from '../repositories/category';
+
+import { createCategory } from '../repositories/category';
 
 
 export async function initalize(
@@ -29,9 +30,17 @@ export async function initalize(
 
     let dsa: { [key: string]: string[] } = {};
     let category = "";
+    let categoryId: number = 0;
     for (let line of dsaFile) {
         if (line[0] == '#') {
             category = line.replace(/#/g, '').substring(1);
+
+            try {
+                categoryId = await createCategory(db, category);           
+            } catch (e) {
+                console.error(e);
+            }
+            
             dsa[category] = [];
         }
 
@@ -40,8 +49,6 @@ export async function initalize(
             dsa[category].push(topic);
         }
     }
-
-    console.log(dsa);
 
 };
 

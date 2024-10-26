@@ -41,7 +41,7 @@ export async function createTables(db: Database) {
     tables.push(`
         CREATE TABLE categories(
             _id         INTEGER PRIMARY KEY AUTOINCREMENT,
-            title       VARCHAR(100),
+            title       VARCHAR(200) UNIQUE,
             topics      JSON
         )
     `);
