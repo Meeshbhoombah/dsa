@@ -47,8 +47,8 @@ async function get(url: string) {
 }
 
 
-export async function getGists(url: string) {
-    let rawGistsString = await get(url);
+export async function getGists() {
+    let rawGistsString = await get(GITHUB_API + 'gists');
     let gists = JSON.parse(rawGistsString);
     return gists;
 }
@@ -65,7 +65,7 @@ export async function getRawDsaGist(gists: object) {
 }
 
 
-export async function parseRawDsaGist(rawDsaGist: string): Promise<[string[], string[]]> {
+export async function parseRawDsaGist(rawDsaGist: string): Promise<[[], []]> {
     return new Promise((_, resolve) => {
         let dsaGist = rawDsaGist.split('\n');
       

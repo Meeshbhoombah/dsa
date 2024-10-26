@@ -28,7 +28,6 @@ async function createTable(database: Database, query: string) {
 
 export async function createTables(db: Database) {
     let tables = [];
-
     // We use `sha256` as a the file checksum because...
     // https://security.stackexchange.com/questions/198631/which-hashing-algorithm-shoud-i-use-for-a-safe-file-checksum
     tables.push(`
@@ -41,7 +40,7 @@ export async function createTables(db: Database) {
 
     tables.push(`
         CREATE TABLE categories(
-            _id         INT PRIMARY KEY AUTOINCREMENT,
+            _id         INTEGER PRIMARY KEY AUTOINCREMENT,
             title       VARCHAR(100),
             topics      JSON
         )
@@ -49,8 +48,8 @@ export async function createTables(db: Database) {
 
     tables.push(`
         CREATE TABLE topics(
-            _id         INT PRIMARY KEY AUTOINCREMENT,
-            category    INT,
+            _id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            category    INTEGER,
             title       VARCHAR(100),
             days        JSON,
 
