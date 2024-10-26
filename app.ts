@@ -97,7 +97,7 @@ import fs from 'fs';
 import DatabaseConstructor, { Database } from 'better-sqlite3';
 
 
-async function createDatabase() {
+async function createDatabase(): Promise<Database> {
     if (!fs.existsSync(DB_PATH)) {
         fs.mkdir(DB_PATH, (e) => {
             throw e;
@@ -105,9 +105,52 @@ async function createDatabase() {
     }
 
     let db: Database = new DatabaseConstructor(DB_PATH + DB_NAME);
-    // Some initialization
     return db;
 }
 
+async function createTable(database: Database, query: string) {
+    try {
+        database.prepare(query).run();
+    } catch (e) {
+        console.error(e);
+    }
+}
 
+
+async function initalizeAppTables(db: Database) {
+    let tables = [];
+
+    // We use `sha256` as a the file checksum because...
+    // https://security.stackexchange.com/questions/198631/which-hashing-algorithm-shoud-i-use-for-a-safe-file-checksum
+    tables.push(`
+        CREATE TABLE metadatas(
+            date        DATETIME,
+            changed     BOOLEAN, 
+            checksum    BINARY(32)
+        )
+    `);
+
+    tables.push(`
+        CREATE TABLE categories(
+            _id         INT PRIMARY KEY,
+            title       VARCHAR(100),
+            topics      JSON
+        )
+    `);
+
+    tables.push(`
+        CREATE TABLE topics(
+            _id         INT PRIMARY KEY,
+            category    INT,
+            title       VARCHAR(100),
+            days        JSON,
+
+            FOREIGN KEY (category) REFERENCES categories (_id)
+        )
+    `);
+
+    tables.forEach((t) => {
+        createTable(db, t);
+    })
+}
 
