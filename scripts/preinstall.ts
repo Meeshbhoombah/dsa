@@ -1,3 +1,4 @@
+/*
 import {
     loadSourceDsaGist
     parseSourceDsaGist
@@ -11,6 +12,7 @@ import {
 import {
     loadRawDsaIntoTopics
 } from '../repositores/topics';
+*/
 
 
 /**
@@ -31,6 +33,7 @@ import {
  *
  */
 
+/*
 let gists = getGists();
 let rawDsaGist = getRawDsaGist(rawDsaGist);
 let [categories, topics] = parseRawDsaGist(rawDsaGist);
@@ -40,4 +43,4 @@ let db = createEmptyDatabase(dir);
 createDatabaseTables(db);
 
 loadRawDsaIntoDatabase(db, categories, topics);
-
+*/

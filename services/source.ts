@@ -1,7 +1,5 @@
 import * as https from 'https';
 
-import state from '../app.ts';
-
 
 const GITHUB_API = 'https://api.github.com/';
 
@@ -55,7 +53,7 @@ async function getGists(url: string) {
 }
 
 async function getRawDsaGist(gists: object) {
-    for (let gist of gists) {
+    for (let [_, gist] of Object.entries(gists)) {
         if (gist.files['DSA.md']) {
             let rawDsaGist = await get(gist.files['DSA.md'].raw_url);
             return rawDsaGist;
@@ -66,22 +64,24 @@ async function getRawDsaGist(gists: object) {
 }
 
 
-async function parseRawDsaGist(rawDsaGist: string): [string[], string[]] {
-    let dsaGist = rawDsaGist.split('\n');
-  
-    let categories = [];
-    let topics = [];
+async function parseRawDsaGist(rawDsaGist: string): Promise<[string[], string[]]> {
+    return new Promise((_, resolve) => {
+        let dsaGist = rawDsaGist.split('\n');
+      
+        let categories = [];
+        let topics = [];
 
-    for (let line of dsaGist) {
-        if (line[0] == '#') {
-            categories.push((line.replace(/#/g, '')).substring(1));
+        for (let line of dsaGist) {
+            if (line[0] == '#') {
+                categories.push((line.replace(/#/g, '')).substring(1));
+            }
+
+            if (line[0] == '-') {
+                topics.push(line.substring(6));
+            }
         }
 
-        if (line[0] == '-') {
-            topics.push(line.substring(6));
-        }
-    }
-
-    return [categories, topics];
+        resolve([categories, topics]);
+    });
 }
 
