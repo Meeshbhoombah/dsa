@@ -31,15 +31,13 @@ import {
  *
  */
 
-
-let rawSourceDsaGistAsString = loadSourceDsaGist();
-let parsedDsaGistAsObject = parseSourceDsaGist();
+let gists = getGists();
+let rawDsaGist = getRawDsaGist(rawDsaGist);
+let [categories, topics] = parseRawDsaGist(rawDsaGist);
 
 let dir = makeAppDir();
-let db = createEmptyDatabase();
+let db = createEmptyDatabase(dir);
 createDatabaseTables(db);
 
-
-let [categories, topics] = [parseDsaGistAsObject.categories, parsedDsaGistASObject.topics];
-loadRawDsaIntoDatabase(categories, topics);
+loadRawDsaIntoDatabase(db, categories, topics);
 

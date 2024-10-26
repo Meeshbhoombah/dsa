@@ -48,14 +48,13 @@ async function get(url: string) {
     });
 }
 
-async function getGists() {
-    let rawGistsString = await get(GITHUB_API + 'gists');
+async function getGists(url: string) {
+    let rawGistsString = await get(url);
     let gists = JSON.parse(rawGistsString);
     return gists;
 }
 
-async function getRawDsaGist() {
-    let gists = await getGists();
+async function getRawDsaGist(gists: object) {
     for (let gist of gists) {
         if (gist.files['DSA.md']) {
             let rawDsaGist = await get(gist.files['DSA.md'].raw_url);
@@ -67,8 +66,7 @@ async function getRawDsaGist() {
 }
 
 
-async function parseLines() {
-    let rawDsaGist = await getRawDsaGist();
+async function parseRawDsaGist(rawDsaGist: string): [string[], string[]] {
     let dsaGist = rawDsaGist.split('\n');
   
     let categories = [];
@@ -84,17 +82,6 @@ async function parseLines() {
         }
     }
 
-    console.log(categories);
-    console.log(topics);
-}
-
-
-async function loadSourceDsaData() {
-    let gists = getGists();
-    let rawDsaGist = getDsaGist(gists);
-}
-
-async function parseSourceDsaGist() {
-
+    return [categories, topics];
 }
 
