@@ -46,11 +46,13 @@ async function get(url: string) {
     });
 }
 
+
 async function getGists(url: string) {
     let rawGistsString = await get(url);
     let gists = JSON.parse(rawGistsString);
     return gists;
 }
+
 
 async function getRawDsaGist(gists: object) {
     for (let [_, gist] of Object.entries(gists)) {
