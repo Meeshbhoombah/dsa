@@ -5,8 +5,7 @@ import { Fonts } from 'figlet';
 import * as figlet from 'figlet';
 import { prompt } from 'enquirer';
 
-
-// import { initalize } from 'controllers/initalize';
+import { initalize } from './controllers/initalize';
 
 
 async function main() {
@@ -19,13 +18,13 @@ async function main() {
         .version('0.0.0')
 
 
-    const HOME          = process.env.HOME;
+    const HOME          = process.env.HOME!;
     const DIR_NAME      = '/.dsa';
     const DB_NAME       = 'database.db';
 
 
     if (!fs.existsSync(HOME + DIR_NAME)) {
-        // initalze();
+        initalize(HOME, DIR_NAME, DB_NAME);
     }
 
     

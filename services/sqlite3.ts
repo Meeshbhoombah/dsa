@@ -6,7 +6,7 @@ const DB_PATH = process.env.HOME + '/.dsa';
 const DB_NAME = '/database.db';
 
 
-async function createDatabase(path: string, name: string): Promise<Database> {
+export async function createDatabase(path: string, name: string): Promise<Database> {
     if (!fs.existsSync(path)) {
         fs.mkdir(path, (e) => {
             throw e;
@@ -26,7 +26,7 @@ async function createTable(database: Database, query: string) {
     }
 }
 
-async function createTables(db: Database) {
+export async function createTables(db: Database) {
     let tables = [];
 
     // We use `sha256` as a the file checksum because...
@@ -41,7 +41,7 @@ async function createTables(db: Database) {
 
     tables.push(`
         CREATE TABLE categories(
-            _id         INT PRIMARY KEY,
+            _id         INT PRIMARY KEY AUTOINCREMENT,
             title       VARCHAR(100),
             topics      JSON
         )
@@ -49,7 +49,7 @@ async function createTables(db: Database) {
 
     tables.push(`
         CREATE TABLE topics(
-            _id         INT PRIMARY KEY,
+            _id         INT PRIMARY KEY AUTOINCREMENT,
             category    INT,
             title       VARCHAR(100),
             days        JSON,
