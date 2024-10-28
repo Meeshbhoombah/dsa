@@ -1,13 +1,10 @@
 import fs from 'fs';
 
 import { Command } from 'commander';
-import { Fonts } from 'figlet';
 import * as figlet from 'figlet';
 import { prompt } from 'enquirer';
 
 import { initalize } from './controllers/initalize';
-
-import { getGists } from './services/source';
 
 
 async function main() {
