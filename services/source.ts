@@ -1,6 +1,9 @@
 import * as https from 'https';
 
+import { Database } from 'better-sqlite3';
+
 import { createCategory } from '../repositories/category';
+import { createTopic } from '../repositories/topic';
 
 
 const GITHUB_API = 'https://api.github.com/';
@@ -71,52 +74,23 @@ export async function getRawDsaGist(gists: object) {
 }
 
 
-export async function parseRawDsaGist(rawDsaGist: string): Promise<[[], []]> {
-    return new Promise((_, resolve) => {
-        let dsaGist = rawDsaGist.split('\n');
-      
-        let categories = [];
-        let topics = [];
-
-        for (let line of dsaGist) {
-            if (line[0] == '#') {
-                categories.push((line.replace(/#/g, '')).substring(1));
-            }
-
-            if (line[0] == '-') {
-                topics.push(line.substring(6));
-            }
-        }
-
-        resolve([categories, topics]);
-    });
-}
-
-
-export async function insertDsaIntoDb(rawDsaFile: string, db: Database) {
+export async function insertDsaIntoDb(db: Database, rawDsaFile: string) {
     let dsaFile = rawDsaFile.split('\n');
     // We can ignore the first line of the file
-    rawDsaFile.shift()!;
+    dsaFile.shift()!;
 
     let category = "";
     let categoryId = 0;
     for (let line of dsaFile) {
         if (line[0] == '#') {
-            category = line.replace(/#/g, '').substring(1);
-            console.log(category);
-
-            try {
-                categoryId = await createCategory(db, category) as number; 
-            } catch (e) {
-                console.error('CategoryId', e);
-            }
+            let category = line.replace(/#/g, '').substring(1);
+            categoryId = await createCategory(db, category) as number; 
         }
 
         if (line[0] == '-') {
             let topic = line.substring(6);
-            dsa[category].push(topic);
+            await createTopic(db, categoryId, topic);
         }
     }
-
 }
 

@@ -6,10 +6,8 @@ import {
     getGists,
     getRawDsaGist,
 
-    // insertDsaIntoDb
+    insertDsaIntoDb
 } from '../services/source';
-
-import { createCategory } from '../repositories/category';
 
 
 export async function initalize(
@@ -23,7 +21,10 @@ export async function initalize(
 
     let gists = await getGists();
     let gist = await getRawDsaGist(gists);
-    await insertDsaIntoDb(db, )
+
+    let dsa = await insertDsaIntoDb(db, gist);
+
+    await createCardsForTopics(db);
 
 };
 

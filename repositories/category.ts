@@ -1,4 +1,4 @@
-import { Database, SqliteError } from 'better-sqlite3';
+import { Database } from 'better-sqlite3';
 
 
 export async function createCategory(db: Database, name: string) {
@@ -14,7 +14,6 @@ export async function createCategory(db: Database, name: string) {
         try {
             resolve(db.prepare(insert).run({ title: name }).lastInsertRowid as number); 
         } catch(e) {
-            console.log('reject', e);
             reject(e);
         }
     });
