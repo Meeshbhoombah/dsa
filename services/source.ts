@@ -1,5 +1,7 @@
 import * as https from 'https';
 
+import { createCategory } from '../repositories/category';
+
 
 const GITHUB_API = 'https://api.github.com/';
 
@@ -48,9 +50,13 @@ async function get(url: string) {
 
 
 export async function getGists() {
-    let rawGistsString = await get(GITHUB_API + 'gists');
-    let gists = JSON.parse(rawGistsString);
-    return gists;
+    try {
+        let rawGistsString = await get(GITHUB_API + 'gists');
+        let gists = JSON.parse(rawGistsString);
+        return gists;
+    } catch(e) {
+        console.error(e);
+    }
 }
 
 export async function getRawDsaGist(gists: object) {
@@ -84,5 +90,33 @@ export async function parseRawDsaGist(rawDsaGist: string): Promise<[[], []]> {
 
         resolve([categories, topics]);
     });
+}
+
+
+export async function insertDsaIntoDb(rawDsaFile: string, db: Database) {
+    let dsaFile = rawDsaFile.split('\n');
+    // We can ignore the first line of the file
+    rawDsaFile.shift()!;
+
+    let category = "";
+    let categoryId = 0;
+    for (let line of dsaFile) {
+        if (line[0] == '#') {
+            category = line.replace(/#/g, '').substring(1);
+            console.log(category);
+
+            try {
+                categoryId = await createCategory(db, category) as number; 
+            } catch (e) {
+                console.error('CategoryId', e);
+            }
+        }
+
+        if (line[0] == '-') {
+            let topic = line.substring(6);
+            dsa[category].push(topic);
+        }
+    }
+
 }
 

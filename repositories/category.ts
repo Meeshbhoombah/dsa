@@ -1,8 +1,8 @@
 import { Database, SqliteError } from 'better-sqlite3';
 
 
-export async function createCategory(db: Database, name: string): Promise<number> {
-    return new Promise((reject, resolve) => {
+export async function createCategory(db: Database, name: string) {
+    return new Promise((resolve, reject) => {
         let insert = `
             INSERT into categories(
                 title 
@@ -12,8 +12,9 @@ export async function createCategory(db: Database, name: string): Promise<number
         `;
 
         try {
-            resolve(db.prepare(insert).run({ title: name }).lastInsertRowid); 
+            resolve(db.prepare(insert).run({ title: name }).lastInsertRowid as number); 
         } catch(e) {
+            console.log('reject', e);
             reject(e);
         }
     });

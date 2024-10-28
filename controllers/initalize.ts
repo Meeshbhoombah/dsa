@@ -6,7 +6,7 @@ import {
     getGists,
     getRawDsaGist,
 
-    parseRawDsaGist
+    // insertDsaIntoDb
 } from '../services/source';
 
 import { createCategory } from '../repositories/category';
@@ -19,36 +19,11 @@ export async function initalize(
 ) {
 
     let db = await createDatabase(home + dirName, dbName);
-    createTables(db);
+    await createTables(db);
 
     let gists = await getGists();
     let gist = await getRawDsaGist(gists);
-
-    let dsaFile = gist.split('\n');
-    // We can ignore the first line of the file
-    dsaFile.shift()!;
-
-    let dsa: { [key: string]: string[] } = {};
-    let category = "";
-    let categoryId: number = 0;
-    for (let line of dsaFile) {
-        if (line[0] == '#') {
-            category = line.replace(/#/g, '').substring(1);
-
-            try {
-                categoryId = await createCategory(db, category);           
-            } catch (e) {
-                console.error(e);
-            }
-            
-            dsa[category] = [];
-        }
-
-        if (line[0] == '-') {
-            let topic = line.substring(6);
-            dsa[category].push(topic);
-        }
-    }
+    await insertDsaIntoDb(db, )
 
 };
 
