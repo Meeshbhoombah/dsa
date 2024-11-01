@@ -57,6 +57,15 @@ export async function createTables(db: Database) {
         )
     `);
 
+    tables.push(`
+        CREATE TABLE cards(
+            _id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            for         INTEGER,
+
+            FOREIGN KEY (for) REFERENCES topics (_id) 
+        )
+    `);
+
     tables.forEach((t) => {
         createTable(db, t);
     })
