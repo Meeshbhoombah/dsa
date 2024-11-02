@@ -48,3 +48,14 @@ export async function difficulty(D: float, G: float, w: IParameters) {
     return D + deltaD * (10 - D) / 9;
 }
 
+
+export async function createCardsForTopics(db: Database) {
+    for topic in database {
+        createCard(
+            initalStability, 
+            initalDifficulty, 
+            initalGrade, 
+        ) 
+    }
+}
+
