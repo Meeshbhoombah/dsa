@@ -8,7 +8,7 @@ import {
 
     insertDsaIntoDb
 } from '../services/source';
-// import { createCardsForTopics } from '../services/fsrs.ts'
+import { createCardsForTopics } from '../services/fsrs';
 
 
 export async function initalize(
@@ -24,7 +24,7 @@ export async function initalize(
     let gist = await getRawDsaGist(gists);
     await insertDsaIntoDb(db, gist);
 
-    // await createCardsForTopics(db);
+    await createCardsForTopics(db);
 
 };
 

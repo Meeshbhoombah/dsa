@@ -92,5 +92,7 @@ export async function insertDsaIntoDb(db: Database, rawDsaFile: string) {
             await createTopic(db, categoryId, topic);
         }
     }
+
+    return;
 }
 

@@ -7,7 +7,7 @@ export async function createTopic(
     name: string
 ) {
     return new Promise((resolve, reject) => {
-        let insert = `
+        let create = `
             INSERT into topics(
                 category, title
             ) VALUES (
@@ -16,7 +16,7 @@ export async function createTopic(
         `;
 
         try {
-            resolve(db.prepare(insert).run({ 
+            resolve(db.prepare(create).run({ 
                 category: categoryId, 
                 title: name 
             }).lastInsertRowid as number); 
@@ -25,3 +25,23 @@ export async function createTopic(
         }
     });
 }
+
+
+export async function readAllTopics(
+    db: Database
+) {
+    return new Promise((resolve, reject) => {
+        let read = `
+            SELECT title
+            FROM topics
+       `; 
+
+
+        try {
+            resolve(db.prepare(read).all()); 
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
