@@ -58,6 +58,14 @@ export async function createTables(db: Database) {
     `);
 
     tables.push(`
+        CREATE TABLE days(
+            _id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            date        DATE,
+            topics      JSON
+        )
+    `);
+
+    tables.push(`
         CREATE TABLE cards(
             _id         INTEGER PRIMARY KEY AUTOINCREMENT,
             for         INTEGER,
