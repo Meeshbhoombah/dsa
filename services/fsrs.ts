@@ -72,6 +72,16 @@ export async function difficulty(
 }
 
 
-export async function createCardsForTopics(db: Database) {
+export async function createInitialTopicDays(db: Database) {
+    let topics = await readAllTopics(db);
+}
+
+
+enum Rating {
+
+}
+
+export async function createCardForTopic(db: Database, rating: Rating) {
+
 }
 
