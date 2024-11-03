@@ -1,6 +1,7 @@
 import { Database } from 'better-sqlite3';
 
 import { readAllTopics } from '../repositories/topic';
+import { createDayForTopic } from '../repositories/day';
 // import { createCard } from '../repositories/card';
 
 
@@ -73,7 +74,12 @@ export async function difficulty(
 
 
 export async function createInitialTopicDays(db: Database) {
-    let topics = await readAllTopics(db);
+    let topics: any = await readAllTopics(db);
+
+    for (let topic in topics) {
+        // await createDayForTopic(topic.id, topic.title, );
+    }
+
 }
 
 

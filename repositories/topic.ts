@@ -32,7 +32,7 @@ export async function readAllTopics(
 ) {
     return new Promise((resolve, reject) => {
         let read = `
-            SELECT title
+            SELECT _id as id, title
             FROM topics
        `; 
 
