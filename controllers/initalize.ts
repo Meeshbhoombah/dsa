@@ -21,16 +21,14 @@ export async function initalize(
 ) {
 
     let db = await createDatabase(home + dirName, dbName);
-    /*
     await createTables(db);
 
     let gists = await getGists();
     let gist = await getRawDsaGist(gists);
     await insertDsaIntoDb(db, gist);
-    */
 
-    await createInitialTopicDays(db);
-    // await createCardForTopic(db);
+    // await createInitialTopicDays(db);
+    await createCardForTopic(db);
 
 };
 

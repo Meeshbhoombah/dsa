@@ -60,7 +60,7 @@ export async function createTables(db: Database) {
     tables.push(`
         CREATE TABLE days(
             _id         INTEGER PRIMARY KEY AUTOINCREMENT,
-            date        DATE,
+            date        DATE UNIQUE,
             topics      JSON
         )
     `);

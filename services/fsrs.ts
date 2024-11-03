@@ -76,10 +76,13 @@ export async function difficulty(
 export async function createInitialTopicDays(db: Database) {
     let topics: any = await readAllTopics(db);
 
-    for (let topic in topics) {
-        // await createDayForTopic(topic.id, topic.title, );
+    let date = new Date();
+    for (let [_, topic] of topics.entries()) {
+        await createDayForTopic(db, topic.id, date);
+        date.setDate(date.getDate() + 1);
     }
 
+    return;
 }
 
 
