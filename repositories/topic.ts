@@ -27,6 +27,7 @@ export async function createTopic(
 }
 
 
+// TODO add categories to read
 export async function readAllTopics(
     db: Database
 ) {
@@ -39,6 +40,25 @@ export async function readAllTopics(
         try {
             resolve(db.prepare(read).all()); 
         } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+export async function readTopicById(
+    db: Database,
+    id: number
+) {
+    return new Promise((resolve, reject) => {
+        let read = `
+            SELECT _id as id, category, title
+            FROM topics
+            WHERE _id = ?
+        `
+    
+        try {
+            resolve(db.prepare(read).get(id));
+        } catch(e) {
             reject(e);
         }
     });

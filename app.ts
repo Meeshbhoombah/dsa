@@ -27,13 +27,11 @@ async function main() {
         await initalize(HOME, DIR_NAME, DB_NAME);
     }
 
-    /*
     console.log(
         figlet.textSync('dsa', {
             font: 'Isometric1',
         })
     );
-    */
 
     day(HOME, DIR_NAME, DB_NAME);
 

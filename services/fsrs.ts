@@ -1,9 +1,12 @@
 import { Database } from 'better-sqlite3';
 
-import { readAllTopics } from '../repositories/topic';
+import { 
+    readAllTopics,
+    readTopicById
+} from '../repositories/topic';
 import { 
     createDayForTopic,
-    readDay
+    readDayByDate
 } from '../repositories/day';
 
 
@@ -89,7 +92,14 @@ export async function createInitialTopicDays(db: Database) {
 
 
 export async function topicsForDay(db: Database, date: Date) {
-    let day: any = await readDay(db, date);
+    let day: any = await readDayByDate(db, date);
     let topics = JSON.parse(day.topics);
+
+    let topicsForDay = [];
+    for (let topic of topics) {
+        topicsForDay.push(await readTopicById(db, topic));
+    }
+
+    return topicsForDay;
 }
 

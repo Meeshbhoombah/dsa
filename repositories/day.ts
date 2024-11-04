@@ -32,7 +32,7 @@ export async function createDayForTopic(
 }
 
 
-export async function readDay(
+export async function readDayByDate(
     db: Database, 
     dateOfDay: Date
 ) {
