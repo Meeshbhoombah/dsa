@@ -1,7 +1,12 @@
 import { prompt } from 'enquirer';
 
 import { createDatabase } from '../services/sqlite3';
-import { topicsForDay } from '../services/fsrs';
+import { 
+    PromptResult,
+
+    topicsForDay,
+    schedule
+} from '../services/fsrs';
 
 
 interface Topic {
@@ -27,11 +32,12 @@ export async function day(
     for (let topic of topics) {
         let t = topic as Topic;
         choices.push({
-            name: t.title,
+            name: t.id,
             message: t.title 
         });
     }
    
+    
     let topicsDisplay = [
         {
             type: 'scale',
@@ -47,13 +53,9 @@ export async function day(
             choices
         }
     ];
-
-    try {
-        prompt(topicsDisplay) 
-            .then((answer) => console.log(answer));
-    } catch(e) {
-        console.error(e); 
-    }
+    
+    prompt(topicsDisplay) 
+        .then((topicsWithRatings) => schedule(topicsWithRatings as PromptResult));
    
 }
 

@@ -103,3 +103,16 @@ export async function topicsForDay(db: Database, date: Date) {
     return topicsForDay;
 }
 
+
+export interface PromptResult {
+    completion: object
+}
+
+export async function schedule(topicsDisplayResult: PromptResult) {
+    let topics = topicsDisplayResult.completion;
+
+    for (let [topicId, rating] of Object.entries(topics)) {
+        let topic = readTopicById(topic);
+    }
+}
+
