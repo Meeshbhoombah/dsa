@@ -5,6 +5,7 @@ import * as figlet from 'figlet';
 import { prompt } from 'enquirer';
 
 import { initalize } from './controllers/initalize';
+import { day } from './controllers/day';
 
 
 async function main() {
@@ -26,9 +27,6 @@ async function main() {
         await initalize(HOME, DIR_NAME, DB_NAME);
     }
 
-    // TODO remove, temp
-    await initalize(HOME, DIR_NAME, DB_NAME);
-
     /*
     console.log(
         figlet.textSync('dsa', {
@@ -37,7 +35,7 @@ async function main() {
     );
     */
 
-    // day();
+    day(HOME, DIR_NAME, DB_NAME);
 
 }
 

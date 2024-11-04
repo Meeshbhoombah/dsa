@@ -31,3 +31,25 @@ export async function createDayForTopic(
     });
 }
 
+
+export async function readDay(
+    db: Database, 
+    dateOfDay: Date
+) {
+    return new Promise((resolve, reject) => {
+        let read = `
+            SELECT _id, date, topics
+            FROM days
+            WHERE date = ?
+        `;
+        
+        let date = dateOfDay.toISOString().split('T')[0];
+
+        try {
+            resolve(db.prepare(read).get(date));
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+

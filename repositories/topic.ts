@@ -36,7 +36,6 @@ export async function readAllTopics(
             FROM topics
        `; 
 
-
         try {
             resolve(db.prepare(read).all()); 
         } catch (e) {

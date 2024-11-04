@@ -10,7 +10,6 @@ import {
 } from '../services/source';
 import { 
     createInitialTopicDays,
-    createCardForTopic 
 } from '../services/fsrs';
 
 
@@ -27,8 +26,8 @@ export async function initalize(
     let gist = await getRawDsaGist(gists);
     await insertDsaIntoDb(db, gist);
 
-    // await createInitialTopicDays(db);
-    await createCardForTopic(db);
+    await createInitialTopicDays(db);
+    return;
 
 };
 

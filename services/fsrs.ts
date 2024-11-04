@@ -1,8 +1,10 @@
 import { Database } from 'better-sqlite3';
 
 import { readAllTopics } from '../repositories/topic';
-import { createDayForTopic } from '../repositories/day';
-// import { createCard } from '../repositories/card';
+import { 
+    createDayForTopic,
+    readDay
+} from '../repositories/day';
 
 
 interface IParameters {
@@ -86,11 +88,8 @@ export async function createInitialTopicDays(db: Database) {
 }
 
 
-enum Rating {
-
-}
-
-export async function createCardForTopic(db: Database, rating: Rating) {
-
+export async function topicsForDay(db: Database, date: Date) {
+    let day: any = await readDay(db, date);
+    let topics = JSON.parse(day.topics);
 }
 
