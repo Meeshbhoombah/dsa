@@ -4,7 +4,7 @@ interface Dictionary<T> {
   [key: string]: T
 }
 
-const NUMERICAL_DATES: Dictionary<string> = {
+const NUMERICAL_MONTHS: Dictionary<string> = {
     'Jan' : '01',
     'Feb' : '02',
     "Mar" : '03',
@@ -19,6 +19,21 @@ const NUMERICAL_DATES: Dictionary<string> = {
     "Dec" : '12'
 }
 
+const NUMERICAL_MONTHS_ARR = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'   
+]
+
 
 export function convertLocaleDateToSqlDate(localeDateString: string) {
     let dateArr = localeDateString.split(' ');
@@ -26,7 +41,7 @@ export function convertLocaleDateToSqlDate(localeDateString: string) {
     let year = dateArr[3];
 
     let localeStringMonth = dateArr[1];
-    let month = NUMERICAL_DATES[localeStringMonth];
+    let month = NUMERICAL_MONTHS[localeStringMonth];
 
     let date = dateArr[2];
 
@@ -34,10 +49,64 @@ export function convertLocaleDateToSqlDate(localeDateString: string) {
 }
 
 
+function convertIntMonthToString(intMonth: number): string {
+    if (intMonth == 13) {
+        intMonth = 1; 
+    }
+
+    return NUMERICAL_MONTHS_ARR[intMonth - 1];
+}
+
 export function incrementDate(localeDateString: string) {
     let dateArr = localeDateString.split(' ');
 
-    let intDate = parseInt(dateArr[2]) + 1;
+    let intMonth = parseInt(NUMERICAL_MONTHS[dateArr[1]]);
+    let intDate = parseInt(dateArr[2]);
+    let intYear = parseInt(dateArr[3])
+
+    // End of the year
+    if (intMonth == 12 && intDate == 31) {
+        dateArr[3] = (++intYear).toString(); 
+    }
+
+    // Leap Year
+    if (intDate == 28) {
+        if (2 == intMonth) {
+            if (intYear % 4 != 0) {
+                intMonth++;
+                dateArr[1] = convertIntMonthToString(intMonth);
+                intDate = 0;
+            }
+        }
+    }
+
+    // Handle Leap Year Day
+    if (intDate == 29 && intMonth == 2) {
+        intMonth++;
+        dateArr[1] = convertIntMonthToString(intMonth);
+        intDate = 0;        
+    }
+
+    // Months with 30 Days
+    if (intDate == 30) {
+        if ([4, 6, 9, 11].includes(intMonth)) {
+            intMonth++;
+            dateArr[1] = convertIntMonthToString(intMonth);
+            intDate = 0;
+        }
+    }
+
+    // Months with 31 Days
+    if (intDate == 31) {
+        if ([1, 3, 5, 7, 8, 10, 12].includes(intMonth)) {
+            intMonth++;
+            dateArr[1] = convertIntMonthToString(intMonth);
+            intDate = 0;
+        }
+    }
+
+    intDate++;
+
 
     if (intDate < 10) {
         dateArr[2] = '0' + intDate.toString()

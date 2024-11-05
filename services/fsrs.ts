@@ -88,7 +88,6 @@ export async function createInitialTopicDays(db: Database) {
     for (let [_, topic] of topics.entries()) {
         await createDayForTopic(db, topic.id, date);
         date = incrementDate(date);
-        console.log(date);
     }
 
     return;
