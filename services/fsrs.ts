@@ -80,11 +80,9 @@ export async function difficulty(
 }
 
 
-export async function createInitialTopicDays(db: Database) {
+export async function createInitialTopicDays(db: Database, date: string) {
     let topics: any = await readAllTopics(db);
 
-    // Creates a new date object based off UTC
-    let date = Date();
     for (let [_, topic] of topics.entries()) {
         await createDayForTopic(db, topic.id, date);
         date = incrementDate(date);

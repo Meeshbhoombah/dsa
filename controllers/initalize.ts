@@ -26,7 +26,9 @@ export async function initalize(
     let gist = await getRawDsaGist(gists);
     await insertDsaIntoDb(db, gist);
 
-    await createInitialTopicDays(db);
+    // TODO: remove hardcoded date for public release
+    let date = `Tue Nov 03 2024 01:08:57 GMT-0500 (Eastern Standard Time)` // Date();
+    await createInitialTopicDays(db, date);
 
     return;
 
