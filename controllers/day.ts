@@ -48,10 +48,10 @@ export async function day(
             name: 'completion',
             message: 'Topics',
             scale: [
-                { name: '1', message: 'Hard' }, 
-                { name: '2', message: 'Good' },
-                { name: '3', message: 'Easy' },
-                { name: '4', message: 'Again' },
+                { name: 'E', message: 'Easy' },
+                { name: 'G', message: 'Good' },
+                { name: 'H', message: 'Hard' },
+                { name: 'A', message: 'Again' },
             ],
             margin: [0.5, 1, 2, 1],
             choices
@@ -59,7 +59,7 @@ export async function day(
     ];
     
     prompt(topicsDisplay) 
-        .then((topicsWithRatings) => schedule(topicsWithRatings as PromptResult));
+        .then((topicsWithRatings) => schedule(db, topicsWithRatings as PromptResult));
    
 }
 

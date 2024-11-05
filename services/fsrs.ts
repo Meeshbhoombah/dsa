@@ -109,11 +109,16 @@ export interface PromptResult {
     completion: object
 }
 
-export async function schedule(topicsDisplayResult: PromptResult) {
+export async function schedule(db: Database, topicsDisplayResult: PromptResult) {
     let topics = topicsDisplayResult.completion;
 
     for (let [topicId, rating] of Object.entries(topics)) {
-        // let topic = readTopicById(topic);
+        let topic = await readTopicById(db, parseInt(topicId));
+
+        if (topic.stability == null) {
+            console.log(topic);
+            console.log(rating);
+        }
     }
 }
 

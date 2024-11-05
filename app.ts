@@ -24,10 +24,14 @@ async function main() {
     const DIR_NAME      = '/.dsa';
     const DB_NAME       = '/database.db';
 
-    
+
+    /*    
     if (!fs.existsSync(HOME + DIR_NAME)) {
         await initalize(HOME, DIR_NAME, DB_NAME);
     }
+
+    await initalize(HOME, DIR_NAME, DB_NAME);
+    */
 
     /*
     console.log(
