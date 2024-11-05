@@ -1,8 +1,8 @@
 import { prompt } from 'enquirer';
 
-import { 
-    convertLocaleDateToSqlDate
-} from '../utils/date';
+import { Topic } from '../types';
+
+import { convertLocaleDateToSqlDate } from '../utils/date';
 
 import { createDatabase } from '../services/sqlite3';
 import { 
@@ -11,15 +11,6 @@ import {
     topicsForDay,
     schedule
 } from '../services/fsrs';
-
-
-interface Topic {
-    id: number,
-    category: number,
-    title: string
-}
-
-
 export async function day(
     home: string, 
     dirName: string, 

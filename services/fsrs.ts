@@ -1,5 +1,7 @@
 import { Database } from 'better-sqlite3';
 
+import { Topic } from '../types';
+
 import { incrementDate } from '../utils/date';
 
 import { 
@@ -12,42 +14,38 @@ import {
 } from '../repositories/day';
 
 
-interface IParameters {
-    0: number,
-    1: number,
-    2: number,
-    3: number,
-    4: number,
-    5: number,
-    6: number,
-    7: number,
-    8: number,
-    9: number,
-    10: number,
-    11: number,
-    12: number,
-    13: number,
-    14: number,
-    15: number,
-    16: number,
-    17: number 
-}
-
-export function createParameters() {
-    /*
-    let w: IParameters = {
-        0:
-    }
-
-    return w;
-    */
-}
+const WEIGHTS = [
+    0.40255, 
+    1.18385, 
+    3.173, 
+    15.69105, 
+    7.1949, 
+    0.5345, 
+    1.4604, 
+    0.0046, 
+    1.54575, 
+    0.1192, 
+    1.01925, 
+    1.9395, 
+    0.11, 
+    0.29605, 
+    2.2698, 
+    0.2315, 
+    2.9898, 
+    0.51655, 
+    0.6621
+]
 
 
-export async function reliability(t: number, S: number) {
+
+export async function retrievability(t: number, S: number) {
     return (1 + (19 / 81) * (t / S)) ^ -0.5;
 }
 
+
+function initialStability(rating: number) {
+    return WEIGHTS[rating];
+}
 
 export async function stability(
     S: number, 
@@ -113,11 +111,13 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
     let topics = topicsDisplayResult.completion;
 
     for (let [topicId, rating] of Object.entries(topics)) {
-        let topic = await readTopicById(db, parseInt(topicId));
+        let topic = await readTopicById(db, parseInt(topicId)) as Topic;
 
         if (topic.stability == null) {
-            console.log(topic);
-            console.log(rating);
+            let initialStabilityForTopic = initialStability(rating);
+            console.log(initialStabilityForTopic);
+            console.log(await retrievability(1, initialStabilityForTopic));
+            // TODO: add field for days since last review
         }
     }
 }
