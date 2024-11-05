@@ -36,5 +36,15 @@ export function convertLocaleDateToSqlDate(localeDateString: string) {
 
 export function incrementDate(localeDateString: string) {
     let dateArr = localeDateString.split(' ');
+
+    let intDate = parseInt(dateArr[2]) + 1;
+
+    if (intDate < 10) {
+        dateArr[2] = '0' + intDate.toString()
+    } else {
+        dateArr[2] = intDate.toString();
+    }
+
+    return dateArr.join(' ');
 }
 

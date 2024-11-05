@@ -4,6 +4,8 @@ import { Command } from 'commander';
 import * as figlet from 'figlet';
 import { prompt } from 'enquirer';
 
+import { incrementDate } from './utils/date';
+
 import { initalize } from './controllers/initalize';
 import { day } from './controllers/day';
 
@@ -27,13 +29,17 @@ async function main() {
         await initalize(HOME, DIR_NAME, DB_NAME);
     }
 
+    // await initalize(HOME, DIR_NAME, DB_NAME);
+
+    /*
     console.log(
         figlet.textSync('dsa', {
             font: 'Isometric1',
         })
     );
+    */
 
-    day(HOME, DIR_NAME, DB_NAME);
+    // day(HOME, DIR_NAME, DB_NAME);
 }
 
 main();

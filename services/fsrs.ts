@@ -1,5 +1,7 @@
 import { Database } from 'better-sqlite3';
 
+import { incrementDate } from '../utils/date';
+
 import { 
     readAllTopics,
     readTopicById
@@ -85,14 +87,15 @@ export async function createInitialTopicDays(db: Database) {
     let date = Date();
     for (let [_, topic] of topics.entries()) {
         await createDayForTopic(db, topic.id, date);
-        date.setDate(date.getDate() + 1);
+        date = incrementDate(date);
+        console.log(date);
     }
 
     return;
 }
 
 
-export async function topicsForDay(db: Database, date: Date) {
+export async function topicsForDay(db: Database, date: string) {
     let day: any = await readDayByDate(db, date);
     let topics = JSON.parse(day.topics);
 

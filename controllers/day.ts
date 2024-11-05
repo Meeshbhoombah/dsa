@@ -26,10 +26,7 @@ export async function day(
     dbName: string
 ) {
 
-    let date = new Date();
-
-    console.log(date);
-    console.log(await convertLocaleDateToSqlDate(Date()));
+    let date = Date();
 
     let db = await createDatabase(home + dirName, dbName);
 

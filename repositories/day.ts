@@ -20,7 +20,7 @@ export async function createDayForTopic(
         // The aggregated set of topics for a day are each topics id, stored
         // within our database as a `JSON` value
         let topics = JSON.stringify([topicId]);
-        let date = dateOfDay.toISOString().split('T')[0];
+        let date = convertLocaleDateToSqlDate(dateOfDay);
 
         try {
             resolve(db.prepare(create).run({
@@ -36,7 +36,7 @@ export async function createDayForTopic(
 
 export async function readDayByDate(
     db: Database, 
-    dateOfDay: Date
+    dateOfDay: string
 ) {
     return new Promise((resolve, reject) => {
         let read = `
@@ -45,7 +45,7 @@ export async function readDayByDate(
             WHERE date = ?
         `;
         
-        let date = dateOfDay.toISOString().split('T')[0];
+        let date = convertLocaleDateToSqlDate(dateOfDay);
 
         try {
             resolve(db.prepare(read).get(date));
