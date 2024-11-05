@@ -14,7 +14,7 @@ import {
 } from '../repositories/day';
 
 
-const WEIGHTS = [
+const W = [
     0.40255, 
     1.18385, 
     3.173, 
@@ -34,8 +34,7 @@ const WEIGHTS = [
     2.9898, 
     0.51655, 
     0.6621
-]
-
+];
 
 
 export async function retrievability(t: number, S: number) {
@@ -44,7 +43,7 @@ export async function retrievability(t: number, S: number) {
 
 
 function initialStability(rating: number) {
-    return WEIGHTS[rating];
+    return W[rating];
 }
 
 export async function stability(
@@ -117,8 +116,29 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
             let initialStabilityForTopic = initialStability(rating);
             console.log(initialStabilityForTopic);
             console.log(await retrievability(1, initialStabilityForTopic));
-            // TODO: add field for days since last review
+
         }
+        
+        // TODO: add field for days since last review
+        // TODO: add field for count of reviews, starting at 1 always
+        
+        /*
+        // '0th' review
+        if (topic.daysSinceReview == 0) {
+            let difficulty = initialDifficulty(rating);
+            let stability = initialStability(rating);
+            // Because this is the first time a card has been visited, its days
+            // since last review are 0, thus we can calculate the inital 
+            // retrievabilty of a card consistently by using the constant 0
+            let retriability = retrivability(stability, 0)
+            let dayIncrement = nextRetrievableDay(retrievability, stability);
+        }
+
+        // '1st' review
+        if (topic.review >= 1) {
+            let retriability = 
+        }
+        */
     }
 }
 

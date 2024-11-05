@@ -29,9 +29,10 @@ async function main() {
     if (!fs.existsSync(HOME + DIR_NAME)) {
         await initalize(HOME, DIR_NAME, DB_NAME);
     }
-
-    await initalize(HOME, DIR_NAME, DB_NAME);
     */
+
+    // TODO: remove for production
+    // await initalize(HOME, DIR_NAME, DB_NAME);
 
     /*
     console.log(
@@ -41,7 +42,7 @@ async function main() {
     );
     */
 
-    day(HOME, DIR_NAME, DB_NAME);
+    // day(HOME, DIR_NAME, DB_NAME);
 }
 
 main();
