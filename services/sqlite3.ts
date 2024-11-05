@@ -68,8 +68,12 @@ export async function createTables(db: Database) {
 
     tables.push(`
         CREATE TABLE cards(
-            _id         INTEGER PRIMARY KEY AUTOINCREMENT,
-            for         INTEGER,
+            _id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+            for                 INTEGER,
+            stability           DECIMAL(100, 50), 
+            retrievability      DECIMAL(100, 50),
+            difficulty          DECIMAL(100, 50),
+            grade               INTEGER,
 
             FOREIGN KEY (for) REFERENCES topics (_id) 
         )
