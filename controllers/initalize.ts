@@ -27,6 +27,7 @@ export async function initalize(
     await insertDsaIntoDb(db, gist);
 
     await createInitialTopicDays(db);
+
     return;
 
 };

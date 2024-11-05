@@ -81,7 +81,8 @@ export async function difficulty(
 export async function createInitialTopicDays(db: Database) {
     let topics: any = await readAllTopics(db);
 
-    let date = new Date();
+    // Creates a new date object based off UTC
+    let date = Date();
     for (let [_, topic] of topics.entries()) {
         await createDayForTopic(db, topic.id, date);
         date.setDate(date.getDate() + 1);
@@ -112,7 +113,7 @@ export async function schedule(topicsDisplayResult: PromptResult) {
     let topics = topicsDisplayResult.completion;
 
     for (let [topicId, rating] of Object.entries(topics)) {
-        let topic = readTopicById(topic);
+        // let topic = readTopicById(topic);
     }
 }
 

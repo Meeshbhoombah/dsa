@@ -22,7 +22,7 @@ async function createTable(database: Database, query: string) {
     try {
         database.prepare(query).run();
     } catch (e) {
-        console.error(e);
+            console.error(e);
     }
 }
 

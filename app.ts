@@ -34,7 +34,6 @@ async function main() {
     );
 
     day(HOME, DIR_NAME, DB_NAME);
-
 }
 
 main();

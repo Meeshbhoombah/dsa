@@ -1,10 +1,12 @@
 import { Database } from 'better-sqlite3';
 
+import { convertLocaleDateToSqlDate } from '../utils/date';
+
 
 export async function createDayForTopic(
     db: Database,
     topicId: number, 
-    dateOfDay: Date
+    dateOfDay: string
 ) {
     return new Promise((resolve, reject) => {
         let create = `

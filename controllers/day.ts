@@ -1,5 +1,9 @@
 import { prompt } from 'enquirer';
 
+import { 
+    convertLocaleDateToSqlDate
+} from '../utils/date';
+
 import { createDatabase } from '../services/sqlite3';
 import { 
     PromptResult,
@@ -23,6 +27,9 @@ export async function day(
 ) {
 
     let date = new Date();
+
+    console.log(date);
+    console.log(await convertLocaleDateToSqlDate(Date()));
 
     let db = await createDatabase(home + dirName, dbName);
 
