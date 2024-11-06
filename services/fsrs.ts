@@ -36,12 +36,30 @@ const W = [
     0.6621
 ];
 
-
+/**
+ *
+ * Calculates the retrievability for a topic at a particular time
+ *
+ * @param {number} t - Days since last review of a topic
+ * @param {number} S - Stability
+ *
+ */
 export function retrievability(t: number, S: number) {
     return (1 + (19 / 81) * (t / S)) ^ -0.5;
 }
 
-export function nextRetrievableDay(r: number, s: number) {
+/**
+ *
+ * Calculates the next day a topic should be retrieved
+ *
+ * @param {number} r - Retrievability
+ * @param {number} S - Stability
+ *
+ * @returns {number} The number of days from now that a topic should should be 
+ *                   reviewed 
+ *
+ */
+export function nextRetrievableDay(r: number, S: number) {
     return (s / (19 / 81)) * (r ^ (1 / -0.5) - 1)
 }
 
