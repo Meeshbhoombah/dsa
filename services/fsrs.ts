@@ -37,8 +37,12 @@ const W = [
 ];
 
 
-export async function retrievability(t: number, S: number) {
+export function retrievability(t: number, S: number) {
     return (1 + (19 / 81) * (t / S)) ^ -0.5;
+}
+
+export function nextRetrievableDay(r: number, s: number) {
+    return (s / (19 / 81)) * (r ^ (1 / -0.5) - 1)
 }
 
 
@@ -107,6 +111,8 @@ export interface PromptResult {
 }
 
 export async function schedule(db: Database, topicsDisplayResult: PromptResult) {
+    // Our imported package "Enquirer" returns the results of a prompt behind 
+    // some object, in this casse the PromptResult is behind `completion`
     let topics = topicsDisplayResult.completion;
 
     for (let [topicId, rating] of Object.entries(topics)) {
@@ -136,7 +142,7 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
 
         // '1st' review
         if (topic.review >= 1) {
-            let retriability = 
+            let difficulty = difficulty(rating);
         }
         */
     }
