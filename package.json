@@ -4,6 +4,7 @@
   "description": "A command-line utility for managing the learning of data structures and algorithms",
   "main": "app.ts",
   "scripts": {
+    "test": "jest --watch",
     "start": "ts-node-dev --respawn --env-file .env app.ts"
   },
   "repository": {
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.11",
     "@types/figlet": "^1.7.0",
+    "jest": "^29.7.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"
   },
