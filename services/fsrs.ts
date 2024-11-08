@@ -138,29 +138,52 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
         
         // TODO: add field for days since last review
         // TODO: add field for count of reviews, starting at 0 always
+        let difficulty = 0;
+        let retrievability = 0;
+        let stability = 0;
         
         // '0th' review
         if (topic.reviews == 0) {
-            let difficulty = initialDifficulty(rating);
-            let stability = initialStability(rating);
+            difficulty = initialDifficulty(rating);
+            stability = initialStability(rating);
             // Because this is the first time a card has been visited, its days
             // since last review are 0, thus we can calculate the inital 
             // retrievabilty of a card consistently by using the constant 0
-            let retriability = retrivability(stability, 0)
-            let dayIncrement = nextRetrievableDay(retrievability, stability);
+            retriability = retrivability(stability, 0)
+            // TODO add scheduling for next card
+
         }
 
         // '1st' review
         if (topic.review >= 1) {
             let lastCard = await readLastCardForTopic(topicId);
 
-            let difficulty = difficulty(rating);
+            difficulty = difficulty(rating);
            
             let daysSinceLastReview = dayDifference(date, lastCard.date);
-            // TODO how do I calculate the retrievability given that it
-            // requires a stability?
-            let retrievability = (daysSinceLastReview, )
+            retrievability = (daysSinceLastReview, lastCard.stability);
+
+            stability = stability(lastCard.stability, difficulty, retrievability, rating);
         }
+            
+        dayIncrement = nextRetrievableDay(retrievability, stability);
+
+        // TODO: add `incrementDateByNumberOfDays` to date util
+        let nextTopicReviewDate = incrementDateByNumberOfDays(dayIncrement, date);
+        // TODO: add `readDayByDate` to day repository
+        let day = await readDayByDate(nextTopicReviewDate);
+        day.topics.push(topicId);
+        // TODO: add `updateTopicsForDay` to day repository
+        await updateTopicsForDay(day);
+
+        await createCard(
+            topicId,
+            date, 
+            rating, 
+            difficulty, 
+            retrievability, 
+            stability
+        );
     }
 }
 
