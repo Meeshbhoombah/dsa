@@ -8,6 +8,7 @@ import { incrementDate } from './utils/date';
 
 import { initalize } from './controllers/initalize';
 import { day } from './controllers/day';
+import { test } from './controllers/test';
 
 
 async function main() {
