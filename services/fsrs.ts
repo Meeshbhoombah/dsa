@@ -135,20 +135,12 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
 
     for (let [topicId, rating] of Object.entries(topics)) {
         let topic = await readTopicById(db, parseInt(topicId)) as Topic;
-
-        if (topic.stability == null) {
-            let initialStabilityForTopic = initialStability(rating);
-            console.log(initialStabilityForTopic);
-            console.log(await retrievability(1, initialStabilityForTopic));
-
-        }
         
         // TODO: add field for days since last review
-        // TODO: add field for count of reviews, starting at 1 always
+        // TODO: add field for count of reviews, starting at 0 always
         
-        /*
         // '0th' review
-        if (topic.daysSinceReview == 0) {
+        if (topic.reviews == 0) {
             let difficulty = initialDifficulty(rating);
             let stability = initialStability(rating);
             // Because this is the first time a card has been visited, its days
@@ -160,9 +152,15 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
 
         // '1st' review
         if (topic.review >= 1) {
+            let lastCard = await readLastCardForTopic(topicId);
+
             let difficulty = difficulty(rating);
+           
+            let daysSinceLastReview = dayDifference(date, lastCard.date);
+            // TODO how do I calculate the retrievability given that it
+            // requires a stability?
+            let retrievability = (daysSinceLastReview, )
         }
-        */
     }
 }
 
