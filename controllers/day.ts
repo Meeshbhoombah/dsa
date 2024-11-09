@@ -39,10 +39,10 @@ export async function day(
             name: 'completion',
             message: 'Topics',
             scale: [
-                { name: 'E', message: 'Easy' },
-                { name: 'G', message: 'Good' },
-                { name: 'H', message: 'Hard' },
                 { name: 'A', message: 'Again' },
+                { name: 'H', message: 'Hard' },
+                { name: 'G', message: 'Good' },
+                { name: 'E', message: 'Easy' },
             ],
             margin: [0.5, 1, 2, 1],
             choices

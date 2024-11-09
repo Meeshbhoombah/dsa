@@ -43,7 +43,9 @@ async function main() {
     );
     */
 
-    // day(HOME, DIR_NAME, DB_NAME);
+    day(HOME, DIR_NAME, DB_NAME);
+    
+    // test();
 }
 
 main();

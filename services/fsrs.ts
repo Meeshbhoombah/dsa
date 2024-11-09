@@ -36,6 +36,7 @@ const W = [
     0.6621
 ];
 
+
 /**
  *
  * Calculates the retrievability for a topic at a particular time
@@ -60,11 +61,11 @@ export function retrievability(t: number, S: number) {
  *
  */
 export function nextRetrievableDay(r: number, S: number) {
-    return (s / (19 / 81)) * (r ^ (1 / -0.5) - 1)
+    return (S / (19 / 81)) * (r ^ (1 / -0.5) - 1)
 }
 
 
-function initialStability(rating: number) {
+export function initialStability(rating: number) {
     return W[rating];
 }
 
@@ -132,7 +133,11 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
     // Our imported package "Enquirer" returns the results of a prompt behind 
     // some object, in this casse the PromptResult is behind `completion`
     let topics = topicsDisplayResult.completion;
+    console.log(topics);
 
+    // TODO:increment the rating by one to match the scale for FSRS
+
+    /*
     for (let [topicId, rating] of Object.entries(topics)) {
         let topic = await readTopicById(db, parseInt(topicId)) as Topic;
         
@@ -185,5 +190,6 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
             stability
         );
     }
+   */
 }
 
