@@ -46,7 +46,7 @@ const W = [
  *
  */
 export function retrievability(t: number, S: number) {
-    return (1 + (19 / 81) * (t / S)) ^ -0.5;
+    return (1 + (19 / 81) * t / S) ^ -0.5;
 }
 
 /**
@@ -71,10 +71,12 @@ export function initialStability(rating: number) {
 }
 
 export function stability(
-    S: number, 
-    D: number
+    D: number,
+    S: number,
+    R: number,
+    G: number
 ) {
-    return S * (1 + W[15] * W[16] * Math.E ^ W[8]) * 11 - D;
+    return S * (Math.E ^ W[8] * (11 - D) * S ^ -W[9] * (Math.E ^ (W[10] * (1 - R) - 1)) + 1);
 }
 
 
