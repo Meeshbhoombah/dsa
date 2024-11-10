@@ -96,7 +96,63 @@ export async function insertDsaIntoDb(db: Database, rawDsaFile: string) {
 }
 
 
-const bodyRaw = `{"query":"\n    query studyPlanDetail($slug: String!) {\n  studyPlanV2Detail(planSlug: $slug) {\n    slug\n    name\n    highlight\n    staticCoverPicture\n    colorPalette\n    threeDimensionUrl\n    description\n    premiumOnly\n    needShowTags\n    awardDescription\n    defaultLanguage\n    award {\n      name\n      config {\n        icon\n        iconGif\n        iconGifBackground\n      }\n    }\n    relatedStudyPlans {\n      cover\n      highlight\n      name\n      slug\n      premiumOnly\n    }\n    planSubGroups {\n      slug\n      name\n      premiumOnly\n      questionNum\n      questions {\n        translatedTitle\n        titleSlug\n        title\n        questionFrontendId\n        paidOnly\n        id\n        difficulty\n        hasOfficialSolution\n        topicTags {\n          slug\n          name\n        }\n        solutionInfo {\n          solutionSlug\n          solutionTopicId\n        }\n      }\n    }\n  }\n}\n    ","variables":{"slug":"top-interview-150"},"operationName":"studyPlanDetail"}`
+const bodyRaw = `{ "query": "query studyPlanDetail($slug: String!) {
+    studyPlanV2Detail(planSlug: $slug) {
+        slug
+        name
+        highlight
+        staticCoverPicture
+        colorPalette
+        threeDimensionUrl
+        description
+        premiumOnly
+        needShowTags
+        awardDescription
+        defaultLanguage
+        award {
+            name
+            config {
+                icon
+                iconGif
+                iconGifBackground
+            }
+        }
+        relatedStudyPlans {
+            cover
+            highlight
+            name
+            slug
+            premiumOnly
+        }
+        planSubGroups {
+            slug
+            name
+            premiumOnly
+            questionNum
+            questions {
+                translatedTitle
+                titleSlug
+                title
+                questionFrontendId
+                paidOnly
+                id
+                difficulty
+                hasOfficialSolution
+                topicTags {
+                    slug
+                    name
+                }
+                solutionInfo {
+                    solutionSlug
+                    solutionTopicId
+                }
+            }
+        }
+    }
+}",
+"variables" : { "slug" : "top-interview-150" }, 
+"operationName" : "studyPlanDetail" 
+}`
 
 export async function postLeetcode(url: string, body: string) {
     return new Promise((resolve, reject) => {
