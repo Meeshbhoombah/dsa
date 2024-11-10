@@ -61,42 +61,34 @@ export function retrievability(t: number, S: number) {
  *
  */
 export function nextRetrievableDay(r: number, S: number) {
-    return (S / (19 / 81)) * (r ^ (1 / -0.5) - 1)
+    let i = (S / (19 / 81)) * ((r ^ (1 / -0.5)) - 1);
+    return Math.max(Math.round(i), 1);
 }
 
 
 export function initialStability(rating: number) {
-    return W[rating];
+    return W[rating - 1];
 }
 
-export async function stability(
+export function stability(
     S: number, 
-    w15: number, 
-    w16: number,
-    e: number,
-    w8: number,
     D: number
 ) {
-    return S * (1 + w15 * w16 * e ^ w8) * 11 - D;
+    return S * (1 + W[15] * W[16] * Math.E ^ W[8]) * 11 - D;
 }
 
 
-export async function initialDifficulty(
-    G: number,
-    e: number,
-    w4: number,
-    w5: number,
-) {
-    return -w4 - e ^ (w5 * (G - 1)) + 1;
+export function initialDifficulty(rating: number) {
+    return W[4] - Math.E ^ (W[5] * (rating - 1)) + 1;
 }
 
-export async function difficulty(
+export function difficulty(
     G: number, 
-    w6: number, 
     D: number
 ) {
-    let deltaD =  - w6 * (G - 3);
-    return D + deltaD * (10 - D) / 9;
+    let deltaD = - W[6] * (G - 3);
+    let dPrime = D + deltaD * (10 - D) / 9;
+    return W[7] * initialDifficulty(4) + (1 - W[7]) * dPrime;
 }
 
 
