@@ -40,7 +40,7 @@ export async function test() {
     let daysSinceLastReview = daysAfterZeroForRevisit;
     let I = daysAfterZeroForRevisit;
 
-    for (let i = 0; i <= 10; i++) {
+    for (let i = 0; i <= 4; i++) {
         // let randomRatingIndex = Math.floor(Math.random() * ratings.length);
         // let G = ratings[randomRatingIndex];
         let G = 3;
