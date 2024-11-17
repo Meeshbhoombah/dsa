@@ -12,7 +12,7 @@ export async function test() {
 
     console.log('Topic One');
     let topicOne = {
-        rating: 3
+        rating: 2
     }
 
     console.log('Initial Rating: ', topicOne.rating);
@@ -26,10 +26,7 @@ export async function test() {
     let zerothRetrievability = retrievability(0, zerothStability);
     console.log('Initial Retrievability: ', zerothRetrievability);
 
-    let daysAfterZeroForRevisit = nextRetrievableDay(
-        zerothRetrievability, 
-        zerothStability
-    );
+    let daysAfterZeroForRevisit = nextRetrievableDay(zerothStability);
     console.log('Initial next day: ', daysAfterZeroForRevisit);
     
     let ratings = [1, 2, 3, 4];
@@ -43,7 +40,7 @@ export async function test() {
     for (let i = 0; i <= 4; i++) {
         // let randomRatingIndex = Math.floor(Math.random() * ratings.length);
         // let G = ratings[randomRatingIndex];
-        let G = 3;
+        let G = 2;
         console.log('Next rating: ', G);
 
         D = difficulty(D, G);
@@ -52,10 +49,10 @@ export async function test() {
         R = retrievability(0, S);
         console.log('Next retrievability: ', R);
         
-        S = stability(D, S, R, G);
+        S = stability(D, S, G);
         console.log('Next stability: ', S);
         
-        I = nextRetrievableDay(R, S);
+        I = nextRetrievableDay(S);
         console.log('Increment: ', I);
     }
 

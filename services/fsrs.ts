@@ -14,6 +14,10 @@ import {
 } from '../repositories/day';
 
 
+const DECAY = -0.5;
+const FACTOR = 0.9 ** (1 / DECAY) - 1;
+const REQUEST_RETENTION = 0.9;
+
 const W = [
     0.40255, 
     1.18385, 
@@ -46,7 +50,7 @@ const W = [
  *
  */
 export function retrievability(t: number, S: number) {
-    return (1 + (19 / 81) * t / S) ^ -0.5;
+    return (1 + FACTOR * t / S) ** DECAY;
 }
 
 /**
@@ -60,37 +64,56 @@ export function retrievability(t: number, S: number) {
  *                   reviewed 
  *
  */
-export function nextRetrievableDay(r: number, S: number) {
-    let i = S / (19 / 81) * ((r ^ (1 / -0.5)) - 1);
+export function nextRetrievableDay(S: number) {
+    let i = S / FACTOR * (REQUEST_RETENTION ** (1 / DECAY) - 1);
     return Math.max(Math.round(i), 1);
 }
 
 
 export function initialStability(rating: number) {
-    return W[rating - 1];
+    return Math.max(W[rating - 1], 0.1);
 }
 
 export function stability(
     D: number,
     S: number,
-    R: number,
-    G: number
+    rating: number
 ) {
-    return S * (Math.E ^ W[8] * (11 - D) * S ^ -W[9] * (Math.E ^ (W[10] * (1 - R) - 1)) + 1);
+    let b = 11 - D;
+    let c = S ** W[9];
+    let d = Math.exp((1 - rating) * W[10] - 1);
+
+    // Hard penalty
+    let e = 1;
+    if (rating == 2) {
+        e = W[15]; 
+    }
+
+    // Easy bonus
+    let f = 1;
+    if (rating == 4) {
+        f = W[16];
+    }
+
+    return S * (1 + Math.exp(W[8]) * b * c * d * e * f)
+
 }
 
 
 export function initialDifficulty(rating: number) {
-    return Math.min(Math.max(W[4] - Math.E ^ (W[5] * (rating - 1)) + 1, 1), 10);
+    return Math.min(Math.max((W[4] - Math.exp(W[5] * (rating - 1))) + 1, 1), 10);
+}
+
+function meanReversion(previousD: number, currentD: number) {
+    return W[7] * previousD + (1 - W[7]) * currentD;
 }
 
 export function difficulty(
-    G: number, 
+    rating: number, 
     D: number
 ) {
-    let deltaD = - W[6] * (G - 3);
-    let dPrime = D + deltaD * (10 - D) / 9;
-    return Math.min(Math.max(W[7] * initialDifficulty(4) + (1 - W[7]) * dPrime, 1), 10);
+    let deltaD = D - W[6] * (rating - 3);
+    return Math.min(Math.max(meanReversion(initialDifficulty(4), deltaD), 1), 10);
 }
 
 
