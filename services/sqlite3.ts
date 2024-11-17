@@ -51,6 +51,7 @@ export async function createTables(db: Database) {
             _id         INTEGER PRIMARY KEY AUTOINCREMENT,
             category    INTEGER,
             title       VARCHAR(100),
+            reviews     INTEGER DEFAULT 0,
             cards       JSON,
 
             FOREIGN KEY (category) REFERENCES categories (_id)

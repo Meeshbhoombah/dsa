@@ -26,14 +26,14 @@ async function main() {
     const DB_NAME       = '/database.db';
 
 
-    /*    
+    /*
     if (!fs.existsSync(HOME + DIR_NAME)) {
         await initalize(HOME, DIR_NAME, DB_NAME);
     }
     */
 
     // TODO: remove for production
-    // await initalize(HOME, DIR_NAME, DB_NAME);
+    // initalize(HOME, DIR_NAME, DB_NAME);
 
     /*
     console.log(
@@ -42,10 +42,10 @@ async function main() {
         })
     );
     */
-
-    // day(HOME, DIR_NAME, DB_NAME);
     
-    test();
+    // test();
+    day(HOME, DIR_NAME, DB_NAME);
+
 }
 
 main();

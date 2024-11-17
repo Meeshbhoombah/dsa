@@ -51,7 +51,7 @@ export async function readTopicById(
 ) {
     return new Promise((resolve, reject) => {
         let read = `
-            SELECT _id as id, category, title
+            SELECT _id as id, category, title, reviews
             FROM topics
             WHERE _id = ?
         `;

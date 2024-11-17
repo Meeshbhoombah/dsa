@@ -96,7 +96,6 @@ export function stability(
     }
 
     return S * (1 + Math.exp(W[8]) * b * c * d * e * f)
-
 }
 
 
@@ -154,16 +153,16 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
 
     // TODO:increment the rating by one to match the scale for FSRS
 
-    /*
     for (let [topicId, rating] of Object.entries(topics)) {
         let topic = await readTopicById(db, parseInt(topicId)) as Topic;
-        
+        console.log(topic);
+    
         // TODO: add field for days since last review
         // TODO: add field for count of reviews, starting at 0 always
         let difficulty = 0;
-        let retrievability = 0;
+        let retrieve = 0;
         let stability = 0;
-        
+      
         // '0th' review
         if (topic.reviews == 0) {
             difficulty = initialDifficulty(rating);
@@ -171,11 +170,12 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
             // Because this is the first time a card has been visited, its days
             // since last review are 0, thus we can calculate the inital 
             // retrievabilty of a card consistently by using the constant 0
-            retriability = retrivability(stability, 0)
+            retrieve = retrievability(0, stability);
             // TODO add scheduling for next card
 
         }
 
+        /*
         // '1st' review
         if (topic.review >= 1) {
             let lastCard = await readLastCardForTopic(topicId);
@@ -206,7 +206,7 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
             retrievability, 
             stability
         );
+        */
     }
-   */
 }
 
