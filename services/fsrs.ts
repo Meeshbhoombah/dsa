@@ -107,15 +107,13 @@ function meanReversion(previousD: number, currentD: number) {
     return W[7] * previousD + (1 - W[7]) * currentD;
 }
 
-export function difficulty(
-    rating: number, 
-    D: number
-) {
+export function difficulty(rating: number, D: number) {
     let deltaD = D - W[6] * (rating - 3);
     return Math.min(Math.max(meanReversion(initialDifficulty(4), deltaD), 1), 10);
 }
 
 
+// TODO: move these to a seperate file for topics, `topics.ts`?
 export async function createInitialTopicDays(db: Database, date: string) {
     let topics: any = await readAllTopics(db);
 
@@ -141,53 +139,71 @@ export async function topicsForDay(db: Database, date: string) {
 }
 
 
+// TODO: move PrompResult to types.ts
 export interface PromptResult {
     completion: object
 }
 
+// TODO: add date to function
+// TODO: rewrite to use shortTermStability instead?
 export async function schedule(db: Database, topicsDisplayResult: PromptResult) {
     // Our imported package "Enquirer" returns the results of a prompt behind 
     // some object, in this casse the PromptResult is behind `completion`
     let topics = topicsDisplayResult.completion;
-    console.log(topics);
-
-    // TODO:increment the rating by one to match the scale for FSRS
 
     for (let [topicId, rating] of Object.entries(topics)) {
+        // Values passed to the scheduling function by `dsa` are 0-indexed, to
+        // match the FSRS algorithm specficiation we must increment ratings by 1
+        rating += 1;
+
         let topic = await readTopicById(db, parseInt(topicId)) as Topic;
-        console.log(topic);
-    
-        // TODO: add field for days since last review
-        // TODO: add field for count of reviews, starting at 0 always
-        let difficulty = 0;
-        let retrieve = 0;
-        let stability = 0;
+        
+        let D = 0;
+        let R = 0;
+        let S = 0;
       
         // '0th' review
         if (topic.reviews == 0) {
-            difficulty = initialDifficulty(rating);
-            stability = initialStability(rating);
+            D = initialDifficulty(rating);
+            S = initialStability(rating);
             // Because this is the first time a card has been visited, its days
             // since last review are 0, thus we can calculate the inital 
             // retrievabilty of a card consistently by using the constant 0
-            retrieve = retrievability(0, stability);
-            // TODO add scheduling for next card
-
+            R = retrievability(0, S);
         }
 
-        /*
-        // '1st' review
-        if (topic.review >= 1) {
-            let lastCard = await readLastCardForTopic(topicId);
+        if (topic.reviews >= 1) {
+            let lastCard = await readMostRecentCardForTopic(topicId);
 
-            difficulty = difficulty(rating);
+            D = difficulty(lastCard.difficulty, rating);
            
             let daysSinceLastReview = dayDifference(date, lastCard.date);
-            retrievability = (daysSinceLastReview, lastCard.stability);
+            R = retrievability(daysSinceLastReview, lastCard.stability);
 
-            stability = stability(lastCard.stability, difficulty, retrievability, rating);
+            // FSRS is an algorithm built for Anki's spaced repition software, 
+            // which has the ability to define whether a user is learning, 
+            // relearing, or reviewing cards -- `dsa` does not need this 
+            // capability, but uses the algorithm
+            //
+            // In Anki, if a card is given an 'Again' rating, i.e: a rating of 
+            // `1`, and the card is being reviewed, there exists a specific 
+            // function `nextForgetStability` that must be used in-place of the
+            // usual stability algorithm
+            switch (rating) {
+                case 1:
+                    // TODO: pass in parameters
+                    S = nextRecallStability();
+                default:
+                    S = stability(
+                            lastCard.stability, 
+                            difficulty, 
+                            retrievability, 
+                            rating
+                        );           
+            }
         }
-            
+        
+        /*    
         dayIncrement = nextRetrievableDay(retrievability, stability);
 
         // TODO: add `incrementDateByNumberOfDays` to date util
