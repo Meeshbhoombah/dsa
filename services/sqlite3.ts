@@ -70,10 +70,11 @@ export async function createTables(db: Database) {
         CREATE TABLE cards(
             _id                 INTEGER PRIMARY KEY AUTOINCREMENT,
             for                 INTEGER,
+            date                DATE UNIQUE,
             stability           DECIMAL(100, 50), 
             retrievability      DECIMAL(100, 50),
             difficulty          DECIMAL(100, 50),
-            grade               INTEGER,
+            rating              INTEGER,
 
             FOREIGN KEY (for) REFERENCES topics (_id) 
         )

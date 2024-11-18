@@ -12,6 +12,9 @@ import {
     createDayForTopic,
     readDayByDate
 } from '../repositories/day';
+import {
+    readMostRecentCardByTopicId
+} from '../repositories/card';
 
 
 const DECAY = -0.5;
@@ -173,8 +176,10 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
         }
 
         if (topic.reviews >= 1) {
-            let lastCard = await readMostRecentCardForTopic(topicId);
+            let lastCard = await readMostRecentCardByTopicId(db, topic.id);
+            console.log(lastCard);
 
+            /*
             D = difficulty(lastCard.difficulty, rating);
            
             let daysSinceLastReview = dayDifference(date, lastCard.date);
@@ -201,6 +206,7 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
                             rating
                         );           
             }
+            */
         }
         
         /*    
@@ -225,4 +231,3 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
         */
     }
 }
-
