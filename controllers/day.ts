@@ -52,7 +52,8 @@ export async function day(
     prompt(topicsDisplay) 
         .then((topicsWithRatings) => schedule(
                                         db, 
-                                        topicsWithRatings as PromptResult
+                                        topicsWithRatings as PromptResult,
+                                        date
                                      )
              );
    

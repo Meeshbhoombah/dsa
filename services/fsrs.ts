@@ -1,8 +1,15 @@
 import { Database } from 'better-sqlite3';
 
-import { Topic } from '../types';
+import { 
+    Topic,
+    Card
+} from '../types';
 
-import { incrementDate } from '../utils/date';
+import { 
+    incrementDate,
+    convertLocaleDateToSqlDate,
+    dayDifference,
+} from '../utils/date';
 
 import { 
     readAllTopics,
@@ -77,14 +84,32 @@ export function initialStability(rating: number) {
     return Math.max(W[rating - 1], 0.1);
 }
 
-export function stability(
+function shortTermStability(
+    D: number, 
+    S: number,
+    R: number
+) {
+    let a = W[11];
+    let b = D ** -W[12];
+    let c = ((S + 1) ** W[13]) - 1;
+    let d = Math.exp((1 - R) * W[14]);
+
+    return a * b * c * d;
+}
+
+export function nextRecallStability(
     D: number,
     S: number,
+    R: number,
     rating: number
 ) {
+    if (rating == 1) {
+        return shortTermStability(D, S, R);
+    }
+
     let b = 11 - D;
     let c = S ** W[9];
-    let d = Math.exp((1 - rating) * W[10] - 1);
+    let d = Math.exp((1 - R) * W[10] - 1);
 
     // Hard penalty
     let e = 1;
@@ -99,6 +124,10 @@ export function stability(
     }
 
     return S * (1 + Math.exp(W[8]) * b * c * d * e * f)
+}
+
+export function stability(S: number, rating: number) {
+    return S * Math.exp(W[17] * (rating - 3 + W[18]));
 }
 
 
@@ -148,11 +177,15 @@ export interface PromptResult {
 }
 
 // TODO: add date to function
-// TODO: rewrite to use shortTermStability instead?
-export async function schedule(db: Database, topicsDisplayResult: PromptResult) {
+export async function schedule(
+    db: Database, 
+    topicsDisplayResult: PromptResult,
+    date: string
+) {
     // Our imported package "Enquirer" returns the results of a prompt behind 
     // some object, in this casse the PromptResult is behind `completion`
     let topics = topicsDisplayResult.completion;
+    date = convertLocaleDateToSqlDate(date);
 
     for (let [topicId, rating] of Object.entries(topics)) {
         // Values passed to the scheduling function by `dsa` are 0-indexed, to
@@ -176,37 +209,14 @@ export async function schedule(db: Database, topicsDisplayResult: PromptResult) 
         }
 
         if (topic.reviews >= 1) {
-            let lastCard = await readMostRecentCardByTopicId(db, topic.id);
-            console.log(lastCard);
-
-            /*
-            D = difficulty(lastCard.difficulty, rating);
+            let lastCard = await readMostRecentCardByTopicId(db, topic.id) as Card;
            
-            let daysSinceLastReview = dayDifference(date, lastCard.date);
-            R = retrievability(daysSinceLastReview, lastCard.stability);
+            D = difficulty(lastCard.difficulty, rating);
 
-            // FSRS is an algorithm built for Anki's spaced repition software, 
-            // which has the ability to define whether a user is learning, 
-            // relearing, or reviewing cards -- `dsa` does not need this 
-            // capability, but uses the algorithm
-            //
-            // In Anki, if a card is given an 'Again' rating, i.e: a rating of 
-            // `1`, and the card is being reviewed, there exists a specific 
-            // function `nextForgetStability` that must be used in-place of the
-            // usual stability algorithm
-            switch (rating) {
-                case 1:
-                    // TODO: pass in parameters
-                    S = nextRecallStability();
-                default:
-                    S = stability(
-                            lastCard.stability, 
-                            difficulty, 
-                            retrievability, 
-                            rating
-                        );           
-            }
-            */
+            let daysSinceLastReview = dayDifference(lastCard.date, date);
+            // R = retrievability(daysSinceLastReview, lastCard.stability);
+
+            S = stability(lastCard.stability, rating);
         }
         
         /*    

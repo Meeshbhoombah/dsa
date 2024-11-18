@@ -5,3 +5,13 @@ export interface Topic {
     reviews: number
 }
 
+
+export interface Card {
+    id: number,
+    for: number,
+    date: string,
+    stability: number,
+    retrievability: number,
+    difficulty: number
+}
+

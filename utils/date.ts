@@ -117,3 +117,84 @@ export function incrementDate(localeDateString: string) {
     return dateArr.join(' ');
 }
 
+export function incrementSqlDate(sqlDate: string) {
+    let dateArr = sqlDate.split('-');
+    
+    let intYear = parseInt(dateArr[0]);
+    let intMonth = parseInt(NUMERICAL_MONTHS[dateArr[1]]);
+    let intDate = parseInt(dateArr[2]);
+
+    // End of the year
+    if (intMonth == 12 && intDate == 31) {
+        dateArr[0] = (++intYear).toString(); 
+    }
+
+    // Leap Year
+    if (intDate == 28) {
+        if (2 == intMonth) {
+            if (intYear % 4 != 0) {
+                intMonth++;
+                dateArr[1] = convertIntMonthToString(intMonth);
+                intDate = 0;
+            }
+        }
+    }
+
+    // Handle Leap Year Day
+    if (intDate == 29 && intMonth == 2) {
+        intMonth++;
+        dateArr[1] = convertIntMonthToString(intMonth);
+        intDate = 0;        
+    }
+
+    // Months with 30 Days
+    if (intDate == 30) {
+        if ([4, 6, 9, 11].includes(intMonth)) {
+            intMonth++;
+            dateArr[1] = convertIntMonthToString(intMonth);
+            intDate = 0;
+        }
+    }
+
+    // Months with 31 Days
+    if (intDate == 31) {
+        if ([1, 3, 5, 7, 8, 10, 12].includes(intMonth)) {
+            intMonth++;
+            dateArr[1] = convertIntMonthToString(intMonth);
+            intDate = 0;
+        }
+    }
+
+    intDate++;
+
+
+    if (intDate < 10) {
+        dateArr[2] = '0' + intDate.toString()
+    } else {
+        dateArr[2] = intDate.toString();
+    }
+
+    return dateArr.join('-');
+}
+
+
+export function dayDifference(olderDate: string, laterDate: string) {
+    let dayDifference = 0;
+    let incrementedDate = olderDate;
+    let olderDateIsNotLaterDate = true;
+    console.log(olderDate);
+    console.log(laterDate);
+    while(olderDateIsNotLaterDate) {
+        incrementedDate = incrementSqlDate(incrementedDate);
+        dayDifference++;
+        
+        if (incrementedDate == laterDate) {
+            return dayDifference;
+        }
+
+        if (dayDifference == 10) {
+            olderDateIsNotLaterDate = false; 
+        }
+    }
+}
+

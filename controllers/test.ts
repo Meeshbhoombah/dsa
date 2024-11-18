@@ -40,7 +40,7 @@ export async function test() {
     for (let i = 0; i <= 4; i++) {
         // let randomRatingIndex = Math.floor(Math.random() * ratings.length);
         // let G = ratings[randomRatingIndex];
-        let G = 2;
+        let G = 3;
         console.log('Next rating: ', G);
 
         D = difficulty(D, G);
@@ -49,7 +49,7 @@ export async function test() {
         R = retrievability(0, S);
         console.log('Next retrievability: ', R);
         
-        S = stability(D, S, G);
+        S = stability(S, G);
         console.log('Next stability: ', S);
         
         I = nextRetrievableDay(S);
