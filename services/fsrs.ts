@@ -32,6 +32,8 @@ import {
     updateTopicsForDayByDate,
 } from '../repositories/day';
 import {
+    createCard,
+
     readMostRecentCardByTopicId
 } from '../repositories/card';
 
@@ -201,6 +203,7 @@ export async function schedule(
 
             S = stability(lastCard.stability, grade);
         }
+
         
         let dayIncrement = nextRetrievableDay(S);
 
@@ -210,15 +213,7 @@ export async function schedule(
         topics.push(topicId);
         await updateTopicsForDayByDate(db, JSON.stringify(topics), day.date);
 
-        /*
-        await createCard(
-            topicId,
-            date, 
-            grade, 
-            difficulty, 
-            retrievability, 
-            stability
-        );
-        */
+        
+        await createCard(db, topicId, date, grade, D, R, S);
     }
 }

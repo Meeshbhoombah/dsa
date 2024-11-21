@@ -108,7 +108,6 @@ export async function insertDsaIntoDb(db: Database, rawDsaFile: string) {
 }
 
 
-// TODO: move these to a seperate file for topics, `topics.ts`?
 export async function createInitialTopicDays(db: Database, date: string) {
     let topics: any = await readAllTopics(db);
 
@@ -121,6 +120,8 @@ export async function createInitialTopicDays(db: Database, date: string) {
 }
 
 
+// TODO: refactor to use `convertSqlDateForTopic` so we can remove the logic
+// from the repository function `readDayByDate`
 export async function topicsForDay(db: Database, date: string) {
     let day: any = await readDayByDate(db, date);
     let topics = JSON.parse(day.topics);
