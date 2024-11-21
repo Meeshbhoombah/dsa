@@ -209,6 +209,8 @@ export async function schedule(
         
         let dayIncrement = nextRetrievableDay(S);
 
+        // Add the current topic (`topicId`) to the next `day` it should appear
+        // in based off the suggested `dayIncrement`
         let nextTopicReviewDate = incrementSqlDateByNumberOfDays(dayIncrement, date);
         let day = await readDayByDate(db, nextTopicReviewDate) as Day;
         let topics = JSON.parse(day.topics);
