@@ -63,3 +63,24 @@ export async function readDayByDate(
     });
 }
 
+
+export function updateTopicsForDayByDate(
+    db: Database, 
+    topics: string,
+    date: string
+) {
+    return new Promise((resolve, reject) => {
+        let update = `
+        UPDATE days
+        SET topics = ?
+        WHERE date = ?
+        `;
+
+        try {
+            resolve(db.prepare(update).run(topics, date));
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+

@@ -2,15 +2,21 @@ import { Database } from 'better-sqlite3';
 
 import { 
     PromptResult,
+
     Day,
+
     Topic,
+
     Card
 } from '../types';
 
 import { 
     incrementDate,
+
     convertLocaleDateToSqlDate,
+
     dayDifference,
+
     incrementSqlDateByNumberOfDays
 } from '../utils/date';
 
@@ -20,7 +26,10 @@ import {
 } from '../repositories/topic';
 import { 
     createDayForTopic,
-    readDayByDate
+
+    readDayByDate,
+
+    updateTopicsForDayByDate,
 } from '../repositories/day';
 import {
     readMostRecentCardByTopicId
@@ -199,12 +208,9 @@ export async function schedule(
         let day = await readDayByDate(db, nextTopicReviewDate) as Day;
         let topics = JSON.parse(day.topics);
         topics.push(topicId);
-        day.topics = JSON.stringify(topics);
-        console.log(day);
-        /*
-        // TODO: add `updateTopicsForDay` to day repository
-        await updateTopicsForDay(day);
+        await updateTopicsForDayByDate(db, JSON.stringify(topics), day.date);
 
+        /*
         await createCard(
             topicId,
             date, 
