@@ -178,6 +178,15 @@ export function incrementSqlDate(sqlDate: string) {
 }
 
 
+export function isValidSqlDate(date: string) {
+    if (!(date.indexOf('-') == 4)) {
+        return false; 
+    }
+
+    return true;
+}
+
+
 export function dayDifference(olderDate: string, laterDate: string) {
     let dayDifference = 0;
     let incrementedDate = olderDate;
@@ -188,10 +197,6 @@ export function dayDifference(olderDate: string, laterDate: string) {
         
         if (incrementedDate == laterDate) {
             return dayDifference;
-        }
-
-        if (dayDifference == 10) {
-            olderDateIsNotLaterDate = false; 
         }
     }
 }

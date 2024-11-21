@@ -3,6 +3,13 @@ export interface PromptResult {
 }
 
 
+export interface Day {
+    id: number;
+    date: string,
+    topics: string
+}
+
+
 export interface Topic {
     id: number,
     category: number,

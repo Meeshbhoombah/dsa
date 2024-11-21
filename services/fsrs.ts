@@ -2,6 +2,7 @@ import { Database } from 'better-sqlite3';
 
 import { 
     PromptResult,
+    Day,
     Topic,
     Card
 } from '../types';
@@ -158,13 +159,14 @@ export async function schedule(
     let topics = topicsDisplayResult.completion;
     date = convertLocaleDateToSqlDate(date);
 
-    for (let [topicId, grade] of Object.entries(topics)) {
+    for (let [topicIdAsString, grade] of Object.entries(topics)) {
         // Values passed to the scheduling function by `dsa` are 0-indexed, as a
         // result of `Enquirer`'s built-in functionality to match the FSRS 
         // algorithm specficiation we must increment grading by 1
         grade += 1;
+        let topicId = parseInt(topicIdAsString);
 
-        let topic = await readTopicById(db, parseInt(topicId)) as Topic;
+        let topic = await readTopicById(db, topicId) as Topic;
         
         let D = 0;
         let R = 0;
@@ -193,12 +195,13 @@ export async function schedule(
         
         let dayIncrement = nextRetrievableDay(S);
 
-        // TODO: add `incrementDateByNumberOfDays` to date util
         let nextTopicReviewDate = incrementSqlDateByNumberOfDays(dayIncrement, date);
+        let day = await readDayByDate(db, nextTopicReviewDate) as Day;
+        let topics = JSON.parse(day.topics);
+        topics.push(topicId);
+        day.topics = JSON.stringify(topics);
+        console.log(day);
         /*
-        // TODO: add `readDayByDate` to day repository
-        let day = await readDayByDate(nextTopicReviewDate);
-        day.topics.push(topicId);
         // TODO: add `updateTopicsForDay` to day repository
         await updateTopicsForDay(day);
 

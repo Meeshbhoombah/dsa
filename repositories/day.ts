@@ -1,6 +1,9 @@
 import { Database } from 'better-sqlite3';
 
-import { convertLocaleDateToSqlDate } from '../utils/date';
+import { 
+    convertLocaleDateToSqlDate,
+    isValidSqlDate
+} from '../utils/date';
 
 
 export async function createDayForTopic(
@@ -44,8 +47,13 @@ export async function readDayByDate(
             FROM days
             WHERE date = ?
         `;
-        
-        let date = convertLocaleDateToSqlDate(dateOfDay);
+     
+        let date;
+        if (!isValidSqlDate(dateOfDay)) {
+            date = convertLocaleDateToSqlDate(dateOfDay);
+        } else {
+            date = dateOfDay; 
+        }
 
         try {
             resolve(db.prepare(read).get(date));
