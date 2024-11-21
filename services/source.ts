@@ -295,6 +295,6 @@ function postLeetcode(url: string, body: object) {
 
 export async function getLeetcodeTop150() {
     let response = await postLeetcode(LEETCODE_API, LEETCODE_TOP_150_QUERY_2) as string;
-    console.log(JSON.stringify(JSON.parse(response), null, 2));
+    // console.log(JSON.stringify(JSON.parse(response), null, 2));
 }
 

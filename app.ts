@@ -31,7 +31,7 @@ async function main() {
     }
 
     // TODO: remove for production
-    await initalize(HOME, DIR_NAME, DB_NAME);
+    // await initalize(HOME, DIR_NAME, DB_NAME);
 
     console.log('\n',
         figlet.textSync('dsa', {
@@ -40,7 +40,7 @@ async function main() {
         '\n'
     );
     
-    // test();
+    test();
     // day(HOME, DIR_NAME, DB_NAME);
 }
 

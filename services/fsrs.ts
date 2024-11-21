@@ -81,8 +81,8 @@ export function nextRetrievableDay(S: number) {
 }
 
 
-export function initialStability(rating: number) {
-    return Math.max(W[rating - 1], 0.1);
+export function initialStability(grade: number) {
+    return Math.max(W[grade - 1], 0.1);
 }
 
 function shortTermStability(
@@ -102,9 +102,9 @@ export function nextRecallStability(
     D: number,
     S: number,
     R: number,
-    rating: number
+    grade: number
 ) {
-    if (rating == 1) {
+    if (grade == 1) {
         return shortTermStability(D, S, R);
     }
 
@@ -114,34 +114,34 @@ export function nextRecallStability(
 
     // Hard penalty
     let e = 1;
-    if (rating == 2) {
+    if (grade == 2) {
         e = W[15]; 
     }
 
     // Easy bonus
     let f = 1;
-    if (rating == 4) {
+    if (grade == 4) {
         f = W[16];
     }
 
     return S * (1 + Math.exp(W[8]) * b * c * d * e * f)
 }
 
-export function stability(S: number, rating: number) {
-    return S * Math.exp(W[17] * (rating - 3 + W[18]));
+export function stability(S: number, grade: number) {
+    return S * Math.exp(W[17] * (grade - 3 + W[18]));
 }
 
 
-export function initialDifficulty(rating: number) {
-    return Math.min(Math.max((W[4] - Math.exp(W[5] * (rating - 1))) + 1, 1), 10);
+export function initialDifficulty(grade: number) {
+    return Math.min(Math.max((W[4] - Math.exp(W[5] * (grade - 1))) + 1, 1), 10);
 }
 
 function meanReversion(previousD: number, currentD: number) {
     return W[7] * previousD + (1 - W[7]) * currentD;
 }
 
-export function difficulty(rating: number, D: number) {
-    let deltaD = D - W[6] * (rating - 3);
+export function difficulty(grade: number, D: number) {
+    let deltaD = D - W[6] * (grade - 3);
     return Math.min(Math.max(meanReversion(initialDifficulty(4), deltaD), 1), 10);
 }
 
@@ -152,15 +152,15 @@ export async function schedule(
     topicsDisplayResult: PromptResult,
     date: string
 ) {
-    // Our imported package "Enquirer" returns the results of a prompt behind 
+    // The imported package "Enquirer" returns the results of a prompt behind 
     // some object, in this casse the PromptResult is behind `completion`
     let topics = topicsDisplayResult.completion;
     date = convertLocaleDateToSqlDate(date);
 
-    for (let [topicId, rating] of Object.entries(topics)) {
+    for (let [topicId, grade] of Object.entries(topics)) {
         // Values passed to the scheduling function by `dsa` are 0-indexed, to
-        // match the FSRS algorithm specficiation we must increment ratings by 1
-        rating += 1;
+        // match the FSRS algorithm specficiation we must increment grading by 1
+        grade += 1;
 
         let topic = await readTopicById(db, parseInt(topicId)) as Topic;
         
@@ -170,8 +170,8 @@ export async function schedule(
       
         // '0th' review
         if (topic.reviews == 0) {
-            D = initialDifficulty(rating);
-            S = initialStability(rating);
+            D = initialDifficulty(grade);
+            S = initialStability(grade);
             // Because this is the first time a card has been visited, its days
             // since last review are 0, thus we can calculate the inital 
             // retrievabilty of a card consistently by using the constant 0
@@ -181,12 +181,12 @@ export async function schedule(
         if (topic.reviews >= 1) {
             let lastCard = await readMostRecentCardByTopicId(db, topic.id) as Card;
            
-            D = difficulty(lastCard.difficulty, rating);
+            D = difficulty(lastCard.difficulty, grade);
 
             let daysSinceLastReview = dayDifference(lastCard.date, date);
             R = retrievability(daysSinceLastReview!, lastCard.stability);
 
-            S = stability(lastCard.stability, rating);
+            S = stability(lastCard.stability, grade);
         }
         
         let dayIncrement = nextRetrievableDay(S);
@@ -203,7 +203,7 @@ export async function schedule(
         await createCard(
             topicId,
             date, 
-            rating, 
+            grade, 
             difficulty, 
             retrievability, 
             stability
