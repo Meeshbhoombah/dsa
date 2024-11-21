@@ -64,3 +64,23 @@ export async function readTopicById(
     });
 }
 
+
+export function updateTopicReviewsIncrementallyById(
+    db: Database,
+    id: number,
+) {
+    return new Promise((resolve, reject) => {
+        let update = `
+            UPDATE topics
+            SET reviews = reviews + 1
+            WHERE _id = ?
+        ` 
+
+        try {
+            resolve(db.prepare(update).run(id)) 
+        } catch(e) {
+        
+        }
+    });
+};
+

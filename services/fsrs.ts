@@ -22,14 +22,16 @@ import {
 
 import { 
     readAllTopics,
-    readTopicById
+    readTopicById,
+
+    updateTopicReviewsIncrementallyById
 } from '../repositories/topic';
 import { 
     createDayForTopic,
 
     readDayByDate,
 
-    updateTopicsForDayByDate,
+    updateTopicsForDayByDate
 } from '../repositories/day';
 import {
     createCard,
@@ -215,5 +217,8 @@ export async function schedule(
 
         
         await createCard(db, topicId, date, grade, D, R, S);
+
+
+        await updateTopicReviewsIncrementallyById(db, topicId);
     }
 }
