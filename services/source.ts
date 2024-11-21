@@ -134,7 +134,12 @@ export async function topicsForDay(db: Database, date: string) {
 }
 
 
-const bodyRaw = `{ "query": "query studyPlanDetail($slug: String!) {
+const LEETCODE_API = 'https://leetcode.com/graphql/';
+
+
+// A hybrid GraphQL/JSON query is made by Leetcode to get the Top 150 interview
+// questions
+const LEETCODE_TOP_150_QUERY = `{ "query": "query studyPlanDetail($slug: String!) {
     studyPlanV2Detail(planSlug: $slug) {
         slug
         name
@@ -192,11 +197,104 @@ const bodyRaw = `{ "query": "query studyPlanDetail($slug: String!) {
 "operationName" : "studyPlanDetail" 
 }`
 
-function postLeetcode(url: string, body: string) {
+const LEETCODE_TOP_150_QUERY_2 = {
+    query: `query studyPlanDetail($slug: String!) {
+        studyPlanV2Detail(planSlug: $slug) {
+            slug
+            name
+            highlight
+            staticCoverPicture
+            colorPalette
+            threeDimensionUrl
+            description
+            premiumOnly
+            needShowTags
+            awardDescription
+            defaultLanguage
+            award {
+                name
+                config {
+                    icon
+                    iconGif
+                    iconGifBackground
+                }
+            }
+            relatedStudyPlans {
+                cover
+                highlight
+                name
+                slug
+                premiumOnly
+            }
+            planSubGroups {
+                slug
+                name
+                premiumOnly
+                questionNum
+                questions {
+                    translatedTitle
+                    titleSlug
+                    title
+                    questionFrontendId
+                    paidOnly
+                    id
+                    difficulty
+                    hasOfficialSolution
+                    topicTags {
+                        slug
+                        name
+                    }
+                    solutionInfo {
+                        solutionSlug
+                        solutionTopicId
+                    }
+                }
+            }
+        }
+    }`,
+    variables: { slug: "top-interview-150" },
+    operationName: "studyPlanDetail"
+};
+
+function postLeetcode(url: string, body: object) {
     return new Promise((resolve, reject) => {
         let options = {
-            'Referer' : 'https://github.com/Meeshbhoombah/dsa'
-        }   
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Referer' : 'https://github.com/Meeshbhoombah/dsa'           
+            }
+        }
+       
+        let req = https.request(url, options, (res) => {
+            let raw: string = "";
+            res.on('data', (d) => {
+                raw += d.toString('utf-8');
+            });
+
+            res.on('end', () => {
+                resolve(raw);
+            });
+
+            res.on('error', (e) => {
+                reject(e) 
+            });
+
+        });
+
+        req.write(JSON.stringify(body));
+
+        req.on('error', (e) => {
+            reject(e);
+        });
+
+        req.end();
+
     });
+}
+
+export async function getLeetcodeTop150() {
+    let response = await postLeetcode(LEETCODE_API, LEETCODE_TOP_150_QUERY_2) as string;
+    console.log(JSON.stringify(JSON.parse(response), null, 2));
 }
 
