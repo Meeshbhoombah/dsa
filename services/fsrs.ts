@@ -1,6 +1,7 @@
 import { Database } from 'better-sqlite3';
 
 import { 
+    PromptResult,
     Topic,
     Card
 } from '../types';
@@ -145,37 +146,6 @@ export function difficulty(rating: number, D: number) {
 }
 
 
-// TODO: move these to a seperate file for topics, `topics.ts`?
-export async function createInitialTopicDays(db: Database, date: string) {
-    let topics: any = await readAllTopics(db);
-
-    for (let [_, topic] of topics.entries()) {
-        await createDayForTopic(db, topic.id, date);
-        date = incrementDate(date);
-    }
-
-    return;
-}
-
-
-export async function topicsForDay(db: Database, date: string) {
-    let day: any = await readDayByDate(db, date);
-    let topics = JSON.parse(day.topics);
-
-    let topicsForDay = [];
-    for (let topic of topics) {
-        topicsForDay.push(await readTopicById(db, topic));
-    }
-
-    return topicsForDay;
-}
-
-
-// TODO: move PrompResult to types.ts
-export interface PromptResult {
-    completion: object
-}
-
 // TODO: add date to function
 export async function schedule(
     db: Database, 
@@ -214,15 +184,15 @@ export async function schedule(
             D = difficulty(lastCard.difficulty, rating);
 
             let daysSinceLastReview = dayDifference(lastCard.date, date);
-            // R = retrievability(daysSinceLastReview, lastCard.stability);
+            R = retrievability(daysSinceLastReview!, lastCard.stability);
 
             S = stability(lastCard.stability, rating);
         }
         
-        /*    
-        dayIncrement = nextRetrievableDay(retrievability, stability);
+        let dayIncrement = nextRetrievableDay(S);
 
         // TODO: add `incrementDateByNumberOfDays` to date util
+        /*
         let nextTopicReviewDate = incrementDateByNumberOfDays(dayIncrement, date);
         // TODO: add `readDayByDate` to day repository
         let day = await readDayByDate(nextTopicReviewDate);

@@ -12,7 +12,7 @@ export async function test() {
 
     console.log('Topic One');
     let topicOne = {
-        rating: 2
+        rating: 3
     }
 
     console.log('Initial Rating: ', topicOne.rating);

@@ -2,8 +2,20 @@ import * as https from 'https';
 
 import { Database } from 'better-sqlite3';
 
+import { incrementDate } from '../utils/date';
+
 import { createCategory } from '../repositories/category';
-import { createTopic } from '../repositories/topic';
+import { 
+    createTopic,
+
+    readAllTopics,
+    readTopicById
+} from '../repositories/topic';
+import { 
+    createDayForTopic,
+
+    readDayByDate
+} from '../repositories/day';
 
 
 const GITHUB_API = 'https://api.github.com/';
@@ -22,7 +34,7 @@ let httpBinRequest = https.get('https://httpbin.org/headers', (res) => {
 */
 
 
-async function get(url: string) {
+function get(url: string) {
     return new Promise<string>((resolve, reject) => {
         let options = {
             headers: {
@@ -96,6 +108,32 @@ export async function insertDsaIntoDb(db: Database, rawDsaFile: string) {
 }
 
 
+// TODO: move these to a seperate file for topics, `topics.ts`?
+export async function createInitialTopicDays(db: Database, date: string) {
+    let topics: any = await readAllTopics(db);
+
+    for (let [_, topic] of topics.entries()) {
+        await createDayForTopic(db, topic.id, date);
+        date = incrementDate(date);
+    }
+
+    return;
+}
+
+
+export async function topicsForDay(db: Database, date: string) {
+    let day: any = await readDayByDate(db, date);
+    let topics = JSON.parse(day.topics);
+
+    let topicsForDay = [];
+    for (let topic of topics) {
+        topicsForDay.push(await readTopicById(db, topic));
+    }
+
+    return topicsForDay;
+}
+
+
 const bodyRaw = `{ "query": "query studyPlanDetail($slug: String!) {
     studyPlanV2Detail(planSlug: $slug) {
         slug
@@ -155,10 +193,8 @@ const bodyRaw = `{ "query": "query studyPlanDetail($slug: String!) {
 }`
 
 export async function postLeetcode(url: string, body: string) {
-    return new Promise((resolve, reject) => {
-        let options = {
-            'Referer' : 'https://github.com/Meeshbhoombah/dsa'
-        }
-    });
+    let options = {
+        'Referer' : 'https://github.com/Meeshbhoombah/dsa'
+    }
 }
 

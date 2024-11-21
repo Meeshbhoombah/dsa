@@ -182,8 +182,6 @@ export function dayDifference(olderDate: string, laterDate: string) {
     let dayDifference = 0;
     let incrementedDate = olderDate;
     let olderDateIsNotLaterDate = true;
-    console.log(olderDate);
-    console.log(laterDate);
     while(olderDateIsNotLaterDate) {
         incrementedDate = incrementSqlDate(incrementedDate);
         dayDifference++;

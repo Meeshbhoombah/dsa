@@ -33,7 +33,7 @@ async function main() {
     */
 
     // TODO: remove for production
-    // await initalize(HOME, DIR_NAME, DB_NAME);
+    await initalize(HOME, DIR_NAME, DB_NAME);
 
     /*
     console.log(
@@ -44,7 +44,7 @@ async function main() {
     */
     
     // test();
-    day(HOME, DIR_NAME, DB_NAME);
+    // day(HOME, DIR_NAME, DB_NAME);
 }
 
 main();

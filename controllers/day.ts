@@ -1,16 +1,14 @@
 import { prompt } from 'enquirer';
 
-import { Topic } from '../types';
+import { Topic, PromptResult } from '../types';
 
 import { convertLocaleDateToSqlDate } from '../utils/date';
 
 import { createDatabase } from '../services/sqlite3';
-import { 
-    PromptResult,
+import { topicsForDay } from '../services/source';
+import { schedule } from '../services/fsrs';
 
-    topicsForDay,
-    schedule
-} from '../services/fsrs';
+
 export async function day(
     home: string, 
     dirName: string, 

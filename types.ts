@@ -1,3 +1,8 @@
+export interface PromptResult {
+    completion: object
+}
+
+
 export interface Topic {
     id: number,
     category: number,

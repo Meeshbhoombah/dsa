@@ -6,11 +6,10 @@ import {
     getGists,
     getRawDsaGist,
 
-    insertDsaIntoDb
+    insertDsaIntoDb,
+
+    createInitialTopicDays
 } from '../services/source';
-import { 
-    createInitialTopicDays,
-} from '../services/fsrs';
 
 
 export async function initalize(
@@ -23,8 +22,8 @@ export async function initalize(
     await createTables(db);
 
     let gists = await getGists();
-    let gist = await getRawDsaGist(gists);
-    await insertDsaIntoDb(db, gist);
+    let gist = await getRawDsaGist(gists!);
+    await insertDsaIntoDb(db, gist!);
 
     // TODO: remove hardcoded date for public release
     let date = `Tue Nov 03 2024 01:08:57 GMT-0500 (Eastern Standard Time)` // Date();
