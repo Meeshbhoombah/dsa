@@ -119,7 +119,7 @@ export function incrementDate(localeDateString: string) {
 
 export function incrementSqlDate(sqlDate: string) {
     let dateArr = sqlDate.split('-');
-    
+
     let intYear = parseInt(dateArr[0]);
     let intMonth = parseInt(NUMERICAL_MONTHS[dateArr[1]]);
     let intDate = parseInt(dateArr[2]);
@@ -194,5 +194,15 @@ export function dayDifference(olderDate: string, laterDate: string) {
             olderDateIsNotLaterDate = false; 
         }
     }
+}
+
+
+export function incrementSqlDateByNumberOfDays(days: number, date: string) {
+    let dateAfterIncrement = date;
+    for (let i = 1; i <= days; i++) {
+        dateAfterIncrement = incrementSqlDate(dateAfterIncrement);
+    }
+    
+    return dateAfterIncrement;
 }
 

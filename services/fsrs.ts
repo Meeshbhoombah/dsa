@@ -10,6 +10,7 @@ import {
     incrementDate,
     convertLocaleDateToSqlDate,
     dayDifference,
+    incrementSqlDateByNumberOfDays
 } from '../utils/date';
 
 import { 
@@ -158,8 +159,9 @@ export async function schedule(
     date = convertLocaleDateToSqlDate(date);
 
     for (let [topicId, grade] of Object.entries(topics)) {
-        // Values passed to the scheduling function by `dsa` are 0-indexed, to
-        // match the FSRS algorithm specficiation we must increment grading by 1
+        // Values passed to the scheduling function by `dsa` are 0-indexed, as a
+        // result of `Enquirer`'s built-in functionality to match the FSRS 
+        // algorithm specficiation we must increment grading by 1
         grade += 1;
 
         let topic = await readTopicById(db, parseInt(topicId)) as Topic;
@@ -192,8 +194,8 @@ export async function schedule(
         let dayIncrement = nextRetrievableDay(S);
 
         // TODO: add `incrementDateByNumberOfDays` to date util
+        let nextTopicReviewDate = incrementSqlDateByNumberOfDays(dayIncrement, date);
         /*
-        let nextTopicReviewDate = incrementDateByNumberOfDays(dayIncrement, date);
         // TODO: add `readDayByDate` to day repository
         let day = await readDayByDate(nextTopicReviewDate);
         day.topics.push(topicId);

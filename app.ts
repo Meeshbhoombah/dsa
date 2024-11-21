@@ -40,8 +40,8 @@ async function main() {
         '\n'
     );
     
-    test();
-    // day(HOME, DIR_NAME, DB_NAME);
+    // test();
+    day(HOME, DIR_NAME, DB_NAME);
 }
 
 main();
