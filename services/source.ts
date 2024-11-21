@@ -192,9 +192,11 @@ const bodyRaw = `{ "query": "query studyPlanDetail($slug: String!) {
 "operationName" : "studyPlanDetail" 
 }`
 
-export async function postLeetcode(url: string, body: string) {
-    let options = {
-        'Referer' : 'https://github.com/Meeshbhoombah/dsa'
-    }
+function postLeetcode(url: string, body: string) {
+    return new Promise((resolve, reject) => {
+        let options = {
+            'Referer' : 'https://github.com/Meeshbhoombah/dsa'
+        }   
+    });
 }
 

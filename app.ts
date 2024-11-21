@@ -26,25 +26,22 @@ async function main() {
     const DB_NAME       = '/database.db';
 
 
-    /*
     if (!fs.existsSync(HOME + DIR_NAME)) {
         await initalize(HOME, DIR_NAME, DB_NAME);
     }
-    */
 
     // TODO: remove for production
-    await initalize(HOME, DIR_NAME, DB_NAME);
+    // await initalize(HOME, DIR_NAME, DB_NAME);
 
-    /*
-    console.log(
+    console.log('\n',
         figlet.textSync('dsa', {
-            font: 'Isometric1',
-        })
+            font: 'Isometric3',
+        }),
+        '\n'
     );
-    */
     
     // test();
-    // day(HOME, DIR_NAME, DB_NAME);
+    day(HOME, DIR_NAME, DB_NAME);
 }
 
 main();
