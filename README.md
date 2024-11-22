@@ -7,7 +7,7 @@ progress made in learning and relearning key Data Structures and Algorithms in
 Computer Science.
 
 ## Features
-- Spaced-repetition learning and relearning with Machine Learning
+- Spaced-repetition learning with ML
 - Local storage with `sqlite3`
 - Command-line interface
 
